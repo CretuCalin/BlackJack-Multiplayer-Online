@@ -1,10 +1,13 @@
 package sample;
 
+import com.sun.org.apache.xpath.internal.operations.And;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,7 +17,6 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -42,7 +44,7 @@ public class PlayScreen extends Application{
         GridPane bp = new GridPane();
         bp.setGridLinesVisible(true);
         bp.setPadding(new Insets(30,50,70,50));
-        bp.setPrefSize(1600,870);
+        //bp.setPrefSize(1600,700);
         bp.setHgap(10);
         bp.setVgap(5);
 
@@ -89,7 +91,7 @@ public class PlayScreen extends Application{
         GridPane tablePane = initializationTable();
         bp.add(tablePane,0,0);
 
-        GridPane boardPane = initializationBoard();
+        HBox boardPane = initializationBoard();
         bp.add(boardPane, 0, 1);
 
 
@@ -120,20 +122,68 @@ public class PlayScreen extends Application{
 
     GridPane initializationTable(){
         GridPane tablePane = new GridPane();
+        //tablePane.setGridLinesVisible(true);
         tablePane.setPrefSize(1200, 700); // CU ASTEA NU NE JUCAM
+        RowConstraints row1 = new RowConstraints();
+        row1.setPercentHeight(40);
+        RowConstraints row2 = new RowConstraints();
+        row2.setPercentHeight(15);
+        RowConstraints row3 = new RowConstraints();
+        row3.setPercentHeight(15);
+        RowConstraints row4 = new RowConstraints();
+        row4.setPercentHeight(15);
+        RowConstraints row5 = new RowConstraints();
+        row5.setPercentHeight(15);
+        tablePane.getRowConstraints().addAll(row1,row2,row3,row4,row5);
+
+        ColumnConstraints column1 = new ColumnConstraints();
+        column1.setPercentWidth(16.66);
+        ColumnConstraints column2 = new ColumnConstraints();
+        column2.setPercentWidth(16.66);
+        ColumnConstraints column3 = new ColumnConstraints();
+        column3.setPercentWidth(16.66);
+        ColumnConstraints column4 = new ColumnConstraints();
+        column4.setPercentWidth(16.66);
+        ColumnConstraints column5 = new ColumnConstraints();
+        column5.setPercentWidth(16.66);
+        ColumnConstraints column6 = new ColumnConstraints();
+        column6.setPercentWidth(16.66);
+        tablePane.getColumnConstraints().addAll(column1,column2,column3,column4,column5,column6);
+
+        AnchorPane cartiOponent1 = cardManager2(0,0,0,0);
+        AnchorPane cartiOponent2 = cardManager2(0,0,0,0);
+        AnchorPane cartiOponent3 = cardManager2(0,0,0,0);
+        AnchorPane cartiOponent4 = cardManager2(0,0,0,0);
+        AnchorPane cartiOponent5 = cardManager2(0,0,0,0);
+        AnchorPane cartiOponent6 = cardManager2(0,0,0,0);
+
+        cartiOponent1.setPadding(new Insets(5));
+        cartiOponent2.setPadding(new Insets(5));
+        cartiOponent3.setPadding(new Insets(5));
+        cartiOponent4.setPadding(new Insets(5));
+        cartiOponent5.setPadding(new Insets(5));
+        cartiOponent6.setPadding(new Insets(5));
+
+
+
+        tablePane.add(cartiOponent1,0,1,1,2);
+        tablePane.add(cartiOponent2,1,2,1,2);
+        tablePane.add(cartiOponent3,2,3,1,2);
+        tablePane.add(cartiOponent4,3,3,1,2);
+        tablePane.add(cartiOponent5,4,2,1,2);
+        tablePane.add(cartiOponent6,5,1,1,2);
+
         return tablePane;
     }
 
-    GridPane initializationBoard(){
-        GridPane localBoardPane = new GridPane();
-        //localBoardPane.setGridLinesVisible(true);
+    HBox initializationBoard(){
+        HBox localBoardPane = new HBox();
+        localBoardPane.setSpacing(10);
         localBoardPane.setPrefSize(1200, 200);
-        localBoardPane.setHgap(10);
-
 
         //ID
         GridPane idInfo = new GridPane();
-        idInfo.setPrefSize(270,200);
+        idInfo.setPrefSize(150,200);
         idInfo.setId("myMessagePane");
 
         ImageView image = new ImageView(new Image(getClass().getResourceAsStream("/resources/profile_picture.jpg"),100,100,true,true));
@@ -149,7 +199,7 @@ public class PlayScreen extends Application{
         idInfo.add(userName,0,1);
         idInfo.setAlignment(Pos.CENTER);
 
-        localBoardPane.add(idInfo,0,0,1,1);
+        localBoardPane.getChildren().add(idInfo);
 
         //MONEY
         GridPane cashPanel = new GridPane();
@@ -170,7 +220,7 @@ public class PlayScreen extends Application{
         cashPanel.add(moneyAmount,0,1);
         cashPanel.setAlignment(Pos.CENTER);
 
-        localBoardPane.add(cashPanel,1,0,1,1);
+        localBoardPane.getChildren().add(cashPanel);
 
 
 
@@ -178,9 +228,10 @@ public class PlayScreen extends Application{
 
         //BorderPane carti = cardManager();
         AnchorPane carti = cardManager();
+        HBox.setHgrow(carti, Priority.ALWAYS);
         carti.setPadding(new Insets(5));
         carti.setId("myMessagePane");
-        localBoardPane.add(carti,2,0,1, 1);
+        localBoardPane.getChildren().add(carti);
         //BUTTONS
 
         GridPane buttonPane = new GridPane();
@@ -203,15 +254,14 @@ public class PlayScreen extends Application{
 
         buttonPane.setId("myMessagePane");
 
-        localBoardPane.add(buttonPane,3,0);
-
+        localBoardPane.getChildren().add(buttonPane);
 
         return localBoardPane;
     }
 
     AnchorPane cardManager(){
         AnchorPane carti = new AnchorPane();
-        carti.setPrefSize(1000, 200);
+        carti.setPrefSize(250, 200);
         ImageView carte1 = new ImageView(new Image(getClass().getResourceAsStream("/resources/deck/2 of Clubs.png")));
         carte1.setFitHeight(170);
         carte1.setFitWidth(117);
@@ -231,11 +281,26 @@ public class PlayScreen extends Application{
         return carti;
     }
 
+    AnchorPane cardManager2(double anchorLeft, double anchorTop, double anchorRight, double anchorBottom){
+        AnchorPane hand = new AnchorPane();
+        ImageView carte = new ImageView(new Image(getClass().getResourceAsStream("/resources/deck/2 of Clubs.png")));
+        carte.setFitHeight(170);
+        carte.setFitWidth(117);
+        AnchorPane.setLeftAnchor(carte,anchorLeft);
+        AnchorPane.setTopAnchor(carte, anchorTop);
+        AnchorPane.setBottomAnchor(carte, anchorBottom);
+        AnchorPane.setRightAnchor(carte, anchorRight);
+
+        hand.getChildren().add(carte);
+
+        return hand;
+    }
+
     GridPane ininializationChat(){
 
         GridPane chatPane = new GridPane();
         //chatPane.setPrefSize(150,750);
-        ColumnConstraints column1 = new ColumnConstraints();
+        GridPane.setHgrow(chatPane, Priority.ALWAYS);
         chatPane.setHgap(10);
         chatPane.setVgap(10);
 
