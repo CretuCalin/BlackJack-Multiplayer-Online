@@ -41,8 +41,9 @@ public class Server {
 
             try{
                 clientSocket = serverSocket.accept();
-                System.out.println("Player connected");
+                System.out.print("Player connected.");
                 noOfPlayers ++;
+                System.out.println("Number of players : "+  noOfPlayers);
             } catch (IOException e) {
                 e.printStackTrace();
             }
