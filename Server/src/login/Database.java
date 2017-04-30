@@ -38,14 +38,23 @@ public class Database {
     }
 
     public boolean userExits(String username, String password) throws NoSuchAlgorithmException {
-
-        byte[] salt = getSalt();
-
-        String query = "Select from Users where Username=" + username + "AND Password=" + get_SHA_1_SecurePassword(password,salt);
-
         try {
             Statement statement = connection.createStatement();
-            ResultSet results = statement.executeQuery(query);
+            ResultSet results;// = statement.executeQuery(query);
+
+            byte[] salt;
+            String hash;
+            String firstQuery = "Select Hash from Users where Username=\"" + username + "\"";
+            results = statement.executeQuery(firstQuery);
+            if (results.next()) {
+                salt = results.getBytes(1);
+            } else {
+                return false;
+            }
+
+            String query = "Select Username from Users where Username=\"" + username + "\" AND Password=\"" + get_SHA_1_SecurePassword(password, salt) + "\"";
+            results = statement.executeQuery(query);
+
             if (results.next())
                 return true;
         } catch (SQLException e) {
@@ -54,64 +63,63 @@ public class Database {
         return false;
     }
 
-    public boolean usernameExits(String username){
-        String query = "Select from Users where Username="+username;
+    public boolean usernameExits(String username) {
+        String query = "Select Username from Users where Username=\"" + username + "\"";
 
-        try{
+        try {
             Statement statement = connection.createStatement();
             ResultSet results = statement.executeQuery(query);
 
             if (results.next())
                 return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    public boolean createNewUser(String username,String password){
-        String query  = "Insert into Users (Username,Password,Points) values (?,?,?)";
+    public boolean createNewUser(String username, String password) {
+        String query = "Insert into Users (Username,Password,Points,Hash) values (?,?,?,?)";
 
         try {
 
             byte[] salt = getSalt();
-            String generatedpasword = get_SHA_1_SecurePassword(password,salt);
+            String generatedpasword = get_SHA_1_SecurePassword(password, salt);
 
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1,username);
-            preparedStatement.setString(2,password);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, generatedpasword);
+            preparedStatement.setInt(3, 0);
+            preparedStatement.setBytes(4, salt);
             preparedStatement.execute();
 
-        }catch (Exception e){
+            return true;
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return false;
     }
 
-    private static String get_SHA_1_SecurePassword(String passwordToHash, byte[] salt)
-    {
+    private String get_SHA_1_SecurePassword(String passwordToHash, byte[] salt) {
         String generatedPassword = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             md.update(salt);
             byte[] bytes = md.digest(passwordToHash.getBytes());
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i< bytes.length ;i++)
-            {
+            for (int i = 0; i < bytes.length; i++) {
                 sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
             }
             generatedPassword = sb.toString();
-        }
-        catch (NoSuchAlgorithmException e)
-        {
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return generatedPassword;
     }
 
-    private static byte[] getSalt() throws NoSuchAlgorithmException
-    {
+    private byte[] getSalt() throws NoSuchAlgorithmException {
         SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
         byte[] salt = new byte[16];
         sr.nextBytes(salt);
