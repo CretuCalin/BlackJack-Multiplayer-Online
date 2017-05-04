@@ -18,6 +18,10 @@ public class Database {
     }
 
     public Database() {
+       connect();
+    }
+
+    public void connect(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
 

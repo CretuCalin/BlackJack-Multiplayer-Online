@@ -58,6 +58,19 @@ public class PlayerBehaviour{
 
     }
 
+
+    public ArrayList<Card> getCards()
+    {
+        return cards;
+    }
+
+    public int getTotal()
+    {
+        return total;
+    }
+
+
+
     public String toString() {
         if (cards.size() != 0) {
             String result = String.format("The cards of %s are: \n", name);
