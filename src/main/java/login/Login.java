@@ -1,5 +1,8 @@
 package login;
 
+import managers.DatabaseManager;
+import managers.Manager;
+
 import javax.xml.crypto.Data;
 import java.security.NoSuchAlgorithmException;
 
@@ -8,44 +11,35 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Login {
 
-    private String username;
-    private String password;
-    private Database database;
 
+    private DatabaseManager database;
+    public Login(DatabaseManager database) throws NoSuchAlgorithmException {
 
-    public Login(){
+        this.database = database;
 
+//        if(exists()){
+//            //TEMPORARY
+//            System.out.println("Logged in successful");
+//        }else{
+//            createUser();
+//        }
+
+//        database.close();
     }
 
-    public Login(String user,String pass) throws NoSuchAlgorithmException {
-        this.username=user;
-        this.password=pass;
-
-        this.database = new Database();
-
-        if(exists()){
-            //TEMPORARY
-            System.out.println("Logged in successful");
-        }else{
-            createUser();
-        }
-
-        database.close();
-    }
-
-    private boolean exists() throws NoSuchAlgorithmException {
+    private boolean exists(String username, String password) throws NoSuchAlgorithmException {
         if (database.userExits(username,password))
             return true;
         return false;
     }
 
-    private void createUser(){
+    private void createUser(String username, String password){
 
-        if (database.usernameExits(this.username)){
+        if (database.usernameExits(username)){
             //TEMPORARY
             System.out.println("Username already exits.");
         }else{
-            if (database.createNewUser(this.username,this.password  ))
+            if (database.createNewUser(username,password ))
                 //TEMPORARY
                 System.out.println("New account created");
             else

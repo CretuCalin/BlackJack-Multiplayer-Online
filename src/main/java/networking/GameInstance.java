@@ -8,7 +8,8 @@ import java.util.ArrayList;
 public class GameInstance {
 
     private ArrayList<PlayerCommunication> threads;
-    
+
+
 
 
 }

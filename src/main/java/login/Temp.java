@@ -9,7 +9,7 @@ public class Temp {
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
 
-        Login login = new Login("Bobby","parola");
+        //Login login = new Login("Bobby","parola");
 
     }
 }
