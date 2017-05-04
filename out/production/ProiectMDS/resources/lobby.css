@@ -1,0 +1,170 @@
+#root {
+
+ -fx-background-color: #C69F5E;
+ -fx-border-radius: 0;
+-fx-padding: 10 10 10 10;
+-fx-background-radius: 20;
+}
+
+ 
+
+#bp {
+-fx-background-image: url("/resources/background_login_big.jpg");
+
+}
+
+#table{
+-fx-background-image: url("/resources/masa.jpeg");
+-fx-border-radius: 0;
+-fx-padding: 10 10 10 10;
+-fx-background-radius: 20;
+}
+
+
+
+#text {
+
+ -fx-fill:  linear-gradient(orange , orangered);
+
+}
+
+#dim {
+
+    -fx-max-width: 290;
+
+
+}
+
+
+    #sendMessage {
+        -fx-background-color:
+           #FFFFFF;
+        -fx-background-insets: 0, 2;
+        -fx-background-radius: 0, 0;
+     }
+
+
+
+     #sendMessage:hover {
+        -fx-background-color:
+            #ffffff;
+    }
+
+     #sendMessage:focused:hover {
+        -fx-background-color:
+            #ffffff;
+    }
+
+#chat {
+
+ -fx-background-color: #C69F5E;
+ -fx-border-radius: 0;
+-fx-padding: 10 10 10 10;
+-fx-background-radius: 20;
+}
+
+
+#scroll-pane > .viewport {
+   -fx-background-color: #FCE7C2;
+}
+
+.scroll-pane {
+   -fx-background-color: #FCE7C2;
+    -fx-border-radius: 0;
+   -fx-padding: 5 5 5 5;
+   -fx-background-radius: 10;
+}
+
+#tutorialButton {
+
+    -fx-background-radius: 10, 10, 9, 8;
+    -fx-padding: 7px 10px 7px 10px;
+    -fx-text-fill:  #ffffff;
+    /*-fx-background-color: linear-gradient(#204F64, #204F64 );*/
+    -fx-background-color: linear-gradient(#9F7531, #9F7531 );
+
+
+}
+
+
+
+#myMessagePane {
+    -fx-background-color: #FCE7C2;
+    -fx-border-radius: 0;
+    -fx-padding: 5 5 5 5;
+    -fx-background-radius: 10;
+}
+
+#sendMessagePane {
+    -fx-text-box-border: transparent;
+    -fx-background-color: #FCE7C2;
+    -fx-border-radius: 0;
+    -fx-padding: 5 5 5 5;
+    -fx-background-radius: 10;
+}
+
+#myMessage{
+    -fx-background-color: linear-gradient(#E1AA4D, #E3BE7F );
+    -fx-border-color: #E3BE7F;
+    -fx-border-radius: 10;
+    -fx-padding: 5 5 5 5;
+    -fx-background-radius: 10;
+}
+
+#yourMessage{
+    -fx-background-color: linear-gradient(#FF9500, #FFCF2F );
+    -fx-border-color: #FF9500;
+    -fx-border-radius: 10;
+    -fx-padding: 5 5 5 5;
+    -fx-background-radius: 10;
+}
+
+#textTutorial{
+    -fx-text-fill:  #663F15;
+}
+
+#profileTopPane {
+    -fx-background-color: #E3BE7F;
+     -fx-border-radius: 0;
+     -fx-padding: 5 5 5 5;
+     -fx-background-radius: 10;
+}
+
+#btnTables{
+    -fx-background-color: #FCE7C2;
+    -fx-text-fill:  #663F15;
+}
+
+#btnRanking{
+    -fx-background-color: linear-gradient(#BA4A00  , #6E2C00 );
+    -fx-text-fill:  #ffffff;
+}
+#btnLogout {
+    -fx-background-color: linear-gradient(#D68910   , #DC7633  );
+    -fx-text-fill:  #ffffff;
+}
+
+
+#btnEditProfile {
+    -fx-background-color: linear-gradient(#BA4A00  , #6E2C00 );
+    -fx-text-fill:  #ffffff;
+}
+
+#btnCreateTable {
+
+    -fx-background-radius: 10, 10, 9, 8;
+    -fx-padding: 10px 10px 10px 10px;
+    -fx-background-color: linear-gradient(orange   , orangered  );
+    -fx-text-fill:  #ffffff;
+
+}
+
+#btnSendMessage{
+    -fx-background-color: linear-gradient(orange , orangered);
+    -fx-text-fill:  #ffffff;
+}
+
+
+
+
+
