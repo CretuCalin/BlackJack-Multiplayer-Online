@@ -13,6 +13,7 @@ public class GameLogic {
 
     private PlayerBehaviour dealer;
 
+
     public GameLogic(GameInstance gameInstance)
     {
         deck = new Deck();
@@ -22,6 +23,17 @@ public class GameLogic {
 
     public void startGame(){
 
+        setPlayersOrder();
+        setTwoCards();
+        showCards();
+
+        gameInstance.setGameStarted(true);
+
+        playersTurn();
+        dealersTurn();
+        sendResoults();
+
+        gameInstance.setGameOver(true);
 
 
     }
@@ -195,6 +207,8 @@ public class GameLogic {
 
         }
     }
+
+
 
 
 

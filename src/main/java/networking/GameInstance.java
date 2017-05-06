@@ -12,6 +12,10 @@ public class GameInstance {
     private int numberOfPlayers;
     private volatile int turn;
 
+
+    private volatile boolean gameStarted;
+    private volatile boolean gameOver;
+
     public GameInstance(ArrayList<PlayerCommunication> threads) {
         this.threads = threads;
         this.numberOfPlayers = threads.size();
@@ -44,7 +48,13 @@ public class GameInstance {
         this.turn = turn;
     }
 
+    public void setGameStarted(boolean start){
+        this.gameStarted = start;
+    }
 
+    public void setGameOver(boolean over){
+        this.gameOver = over;
+    }
 
 
 

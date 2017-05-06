@@ -63,10 +63,10 @@ public class Server {
 
     public void waitForConnections() {
 
-        Date timeToRun;
 
         while (running && totalNumberOfPlayers < 16)
         {
+            System.out.println("waiting for connections");
             try {
 
                 clientSocket = serverSocket.accept();
