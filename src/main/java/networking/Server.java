@@ -1,15 +1,11 @@
 package networking;
 
 import gamelogic.GameLogic;
-import gamelogic.PlayerBehaviour;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,7 +25,7 @@ public class Server {
     private int totalNumberOfPlayers;
     private volatile boolean running;
 
-    private final int portNumber = 9797;
+    private final int portNumber = 12345;
 
     private volatile int turn;
 
