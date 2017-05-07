@@ -1,10 +1,16 @@
 package networking;
 
 import gamelogic.GameLogic;
+import managers.Manager;
+import org.omg.CORBA.IRObjectOperations;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -59,16 +65,30 @@ public class Server {
 
     public void waitForConnections() {
 
-
+        System.out.println("waiting for connections");
         while (running && totalNumberOfPlayers < 16)
         {
-            System.out.println("waiting for connections");
+
             try {
 
                 clientSocket = serverSocket.accept();
+
+                // uncomment this
+//
+//                ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
+//                ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
+//
+//                String username = (String) in.readObject();
+//                String password = (String) in.readObject();
+//
+//                Manager.getInstance().getLoginManager().
+
+
                 threads.add(new PlayerCommunication(clientSocket,this,numberOfPlayersOfThisGame,"Player " + (numberOfPlayersOfThisGame + 1)));
                 threadPool.execute(threads.get(threads.size() - 1));
+
                 System.out.println("Player connected");
+
 
                 totalNumberOfPlayers++;
                 numberOfPlayersOfThisGame++;

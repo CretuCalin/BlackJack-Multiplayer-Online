@@ -58,6 +58,7 @@ public class GameLogic {
             card = deck.drawCard();
             gameInstance.getThreads().get(i).addCard(card);
         }
+
         card = deck.drawCard();
         dealer.addCard(card);
         card = deck.drawCard();
