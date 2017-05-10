@@ -3,6 +3,7 @@ package networking;
 import gamelogic.GameLogic;
 import managers.Manager;
 import org.omg.CORBA.IRObjectOperations;
+import pojo.User;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -25,13 +26,14 @@ public class Server {
     private static Socket clientSocket;
     private ExecutorService threadPool;
 
-    private ArrayList<PlayerCommunication> threads;
+    private ArrayList<PlayerCommunication> waiting;
+    private ArrayList<PlayerCommunication> playing;
 
     private int numberOfPlayersOfThisGame;
     private int totalNumberOfPlayers;
     private volatile boolean running;
 
-    private final int portNumber = 12345;
+    private final int portNumber = 9998;
 
     private volatile int turn;
 
@@ -47,7 +49,8 @@ public class Server {
     public Server(){
 
         threadPool = Executors.newCachedThreadPool();
-        threads = new ArrayList<PlayerCommunication>();
+        waiting = new ArrayList<>();
+        playing = new ArrayList<>();
         numberOfPlayersOfThisGame = 0;
         totalNumberOfPlayers = 0;
         turn = 0;
@@ -73,35 +76,20 @@ public class Server {
 
                 clientSocket = serverSocket.accept();
 
-                // uncomment this
-//
-//                ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
-//                ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
-//
-//                String username = (String) in.readObject();
-//                String password = (String) in.readObject();
-//
-//                Manager.getInstance().getLoginManager().
+                User user = new User(clientSocket);
+                PlayerCommunication player = new PlayerCommunication(user,this,numberOfPlayersOfThisGame,"Player " + (numberOfPlayersOfThisGame + 1));
 
+                while (!player.verify() && !clientSocket.isClosed()){
+                    System.out.println("Login failed\nRetry.");
+                }
+                if(clientSocket.isClosed())
+                    user.close();
+                else {
+                    waiting.add(player);
+                    threadPool.execute(player);
 
-                threads.add(new PlayerCommunication(clientSocket,this,numberOfPlayersOfThisGame,"Player " + (numberOfPlayersOfThisGame + 1)));
-                threadPool.execute(threads.get(threads.size() - 1));
-
-                System.out.println("Player connected");
-
-
-                totalNumberOfPlayers++;
-                numberOfPlayersOfThisGame++;
-
-                if(totalNumberOfPlayers % numberOfPlayersPerGame == 0){
-
-                    ArrayList<PlayerCommunication> gameThreads = new ArrayList<>();
-                    gameThreads.add(threads.get(threads.size()-1));
-                    gameThreads.add(threads.get(threads.size()-2));
-                    gameThreads.add(threads.get(threads.size()-3));
-                    gameThreads.add(threads.get(threads.size()-4));
-
-                    gameInstance = new GameInstance(gameThreads);
+                    totalNumberOfPlayers++;
+                    //gameInstance = new GameInstance(gameThreads);
 
                     new Thread(new Runnable() {
                         @Override
@@ -112,10 +100,7 @@ public class Server {
 
                         }
                     }).start();
-
-
                 }
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

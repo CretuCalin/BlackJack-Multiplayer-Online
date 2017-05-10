@@ -1,6 +1,7 @@
 package managers;
 
 import login.Login;
+import pojo.User;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -11,8 +12,20 @@ public class LoginManager {
 
     private Login login;
 
-    public LoginManager() throws NoSuchAlgorithmException {
-        login = new Login(Manager.getInstance().getDatabaseManager());
+    private static LoginManager instance;
+
+    public static LoginManager getInstance() throws NoSuchAlgorithmException {
+        if(instance == null)
+            instance = new LoginManager();
+        return instance;
+    }
+
+    private LoginManager() throws NoSuchAlgorithmException {
+        login = new Login();
+    }
+
+    public String newPlayer(User user){
+        return login.verify(user.getUsername(), user.getPassword());
     }
 
 

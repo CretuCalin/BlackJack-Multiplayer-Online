@@ -7,7 +7,7 @@ import java.security.SecureRandom;
 import java.sql.*;
 
 /**
- * Created by bobby on 27-04-2017.
+ Created by bobby on 27-04-2017.
  */
 public class Database {
 
@@ -25,7 +25,7 @@ public class Database {
         try {
             Class.forName("com.mysql.jdbc.Driver");
 
-            connection = DriverManager.getConnection("jdbc:mysql://ihatethis.ddns.net:3306/MDS", "bobby", "goodBYE1!");
+            connection = DriverManager.getConnection("jdbc:mysql://ihatethis.ddns.net:3306/MDS?autoReconnect=true&useSSL=false", "bobby", "goodBYE1!");
 
 
         } catch (Exception e) {
@@ -41,7 +41,7 @@ public class Database {
         }
     }
 
-    public boolean userExits(String username, String password) throws NoSuchAlgorithmException {
+    public String userExits(String username, String password) throws NoSuchAlgorithmException {
         try {
             Statement statement = connection.createStatement();
             ResultSet results;// = statement.executeQuery(query);
@@ -50,24 +50,27 @@ public class Database {
             String hash;
             String firstQuery = "Select Hash from Users where Username=\"" + username + "\"";
             results = statement.executeQuery(firstQuery);
+
             if (results.next()) {
                 salt = results.getBytes(1);
             } else {
-                return false;
+                return "User Dosen't exist.";
             }
+
 
             String query = "Select Username from Users where Username=\"" + username + "\" AND Password=\"" + get_SHA_1_SecurePassword(password, salt) + "\"";
             results = statement.executeQuery(query);
 
             if (results.next())
-                return true;
+                return "Correct autentification.";
+            else  return "Wrong Password.";
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return "An error has occurd.";
     }
 
-    public boolean usernameExits(String username) {
+    /*public boolean usernameExits(String username) {
         String query = "Select Username from Users where Username=\"" + username + "\"";
 
         try {
@@ -80,7 +83,7 @@ public class Database {
             e.printStackTrace();
         }
         return false;
-    }
+    }*/
 
     public boolean createNewUser(String username, String password) {
         String query = "Insert into Users (Username,Password,Points,Hash) values (?,?,?,?)";

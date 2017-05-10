@@ -4,6 +4,7 @@ import managers.DatabaseManager;
 import managers.Manager;
 
 import javax.xml.crypto.Data;
+import java.lang.ref.SoftReference;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -11,42 +12,39 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Login {
 
+    public Login() {}
 
-    private DatabaseManager database;
-    public Login(DatabaseManager database) throws NoSuchAlgorithmException {
-
-        this.database = database;
-
-//        if(exists()){
-//            //TEMPORARY
-//            System.out.println("Logged in successful");
-//        }else{
-//            createUser();
-//        }
-
-//        database.close();
+    private String exists(String username, String password) throws NoSuchAlgorithmException {
+       return Manager.getInstance().UserExists(username,password);
     }
 
-    private boolean exists(String username, String password) throws NoSuchAlgorithmException {
-        if (database.userExits(username,password))
-            return true;
-        return false;
-    }
+    private String createUser(String username, String password) throws NoSuchAlgorithmException {
 
-    private void createUser(String username, String password){
-
-        if (database.usernameExits(username)){
+        /*if (Manager.getInstance().UsernameExists(username)){
             //TEMPORARY
-            System.out.println("Username already exits.");
-        }else{
-            if (database.createNewUser(username,password ))
+            return "Username already exits.";
+        }else{*/
+            if (Manager.getInstance().CreateNewUser(username,password ))
                 //TEMPORARY
-                System.out.println("New account created");
+                return "New account created";
             else
                 // TEMPORARY
-                System.out.println("Failed to create a new account");
-        }
+                return "Failed to create a new account";
+        //}
 
+    }
+
+    public String verify(String username, String password){
+        try {
+            String message = exists(username, password);
+            if (message.equals("User Dosen't exist.")){
+                return createUser(username, password);
+            }
+            return message;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return "An error has occurd.";
+        }
     }
 
 }
