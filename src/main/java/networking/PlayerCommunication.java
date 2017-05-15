@@ -1,7 +1,10 @@
 package networking;
 
+import gamelogic.GameLogic;
 import gamelogic.PlayerBehaviour;
+import javafx.scene.control.Tab;
 import managers.Manager;
+import pojo.Table;
 import pojo.User;
 
 import java.io.IOException;
@@ -21,11 +24,11 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
     private Server server;
     private User user;
 
+    private GameLogic game;
 
     private String message;
     private int turn;
     private volatile boolean finished;
-    private String table;
 
 
     public PlayerCommunication(User user, Server server, int turn, String name) {
@@ -52,21 +55,30 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
 
     }
 
+    public String read(){
+        try {
+            String message = (String) input.readObject();
+            return message;
+        } catch (IOException e) {
+            e.printStackTrace();
+            finished = true;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public boolean verify(){
         try {
             sendToClient("Username:" );
-            user.setUsername((String) input.readObject());
+            user.setUsername(read());
             sendToClient("Password");
-            user.setPassword ((String) input.readObject());
+            user.setPassword (read());
             String message = Manager.getInstance().getLoginManager().newPlayer(user);
             sendToClient(message);
             if (message.equals("User Dosen't exist.") || message.equals("Wrong Password.") || message.equals("An error has occurd."))
                 return false;
             return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -75,19 +87,40 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
 
 
     private void enterATable() throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
-        while(!socket.isClosed())
+        String table;
+        if(!finished)
         {
             sendToClient("Choose a table from:");
             Manager.getInstance().getTablesManager().printTables();
-            message = (String) input.readObject();
+            message = read();
             System.out.println(message);
             table = MessagesInterpreter.getInstance().tableInterpreter(message);
-            user.setTable(table);
+            Table tab = Table.existingTable(table);
+            if(tab != null){
+                user.setTable(tab);
+                tab.addPlayer(this);
+            }
+            else {
+                tab = createTable(table, this);
+                user.setTable(tab);
+                user.setAdmin(true);
+                tab.addPlayer(this);
+                Table.addTable(tab);
+            }
         }
     }
 
+    public Table createTable(String name, PlayerCommunication player){
+        sendToClient("Numer of players");
+        int n = Integer.parseInt(read());
+        Table table = new Table(n, name, player);
+        sendToClient("Table createad");
+        System.out.println("Table createad " + table.getName());
+        return table;
+    }
+
     public boolean isOnTable(){
-        if(table != null){
+        if(user.getTable() != null){
             return true;
         }
         return false;
@@ -99,6 +132,22 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
         try {
             // waiting to enter a table
             enterATable();
+
+            if(user.isAdmin()) {
+                sendToClient("Do we start the game?");
+                String message = read();
+                if(message.equals("NOW"));
+                GameInstance gameInstance = new GameInstance(user.getTable().getPlayers(), user.getTable().getNumberPlayers());
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        game = new GameLogic(gameInstance);
+                        game.startGame();
+
+                    }
+                }).start();
+            }
 
             while (isOnTable()) {
                 if (server.getTurn() == this.turn && server.isGameStarted() && !finished) {
@@ -112,11 +161,11 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
-           // e.printStackTrace();
+            e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         } finally {
-            user.close();
+            close();
         }
 
     }
@@ -127,6 +176,7 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
             output.flush();
         } catch (IOException e) {
             e.printStackTrace();
+            finished = true;
         }
     }
 
@@ -138,7 +188,7 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
         this.finished = finished;
     }
 
-    public void close() throws IOException {  user.close();   }
+    public void close()  {  user.close();   }
 
 
 }

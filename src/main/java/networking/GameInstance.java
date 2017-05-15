@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class GameInstance {
 
 
-    private ArrayList<PlayerCommunication> threads;
+    private PlayerCommunication[] threads;
     private int numberOfPlayers;
     private volatile int turn;
 
@@ -17,19 +17,19 @@ public class GameInstance {
     private volatile boolean gameStarted;
     private volatile boolean gameOver;
 
-    public GameInstance(ArrayList<PlayerCommunication> threads) {
+    public GameInstance(PlayerCommunication[] threads, int n) {
         this.threads = threads;
-        this.numberOfPlayers = threads.size();
+        this.numberOfPlayers = n;
         this.turn = 0;
     }
 
 
 
-    public ArrayList<PlayerCommunication> getThreads() {
+    public PlayerCommunication[] getThreads() {
         return threads;
     }
 
-    public void setThreads(ArrayList<PlayerCommunication> threads) {
+    public void setThreads(PlayerCommunication[] threads) {
         this.threads = threads;
     }
 

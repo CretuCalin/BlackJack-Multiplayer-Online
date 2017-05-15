@@ -1,8 +1,10 @@
 package networking;
 
 import gamelogic.GameLogic;
+import javafx.scene.control.Tab;
 import managers.Manager;
 import org.omg.CORBA.IRObjectOperations;
+import pojo.Table;
 import pojo.User;
 
 import java.io.IOException;
@@ -73,33 +75,21 @@ public class Server {
         {
 
             try {
-
                 clientSocket = serverSocket.accept();
-
                 User user = new User(clientSocket);
                 PlayerCommunication player = new PlayerCommunication(user,this,numberOfPlayersOfThisGame,"Player " + (numberOfPlayersOfThisGame + 1));
 
-                while (!player.verify() && !clientSocket.isClosed()){
+                while (!player.verify() && !player.isFinished()){
                     System.out.println("Login failed\nRetry.");
                 }
-                if(clientSocket.isClosed())
+                if(player.isFinished())
                     user.close();
                 else {
                     waiting.add(player);
                     threadPool.execute(player);
 
                     totalNumberOfPlayers++;
-                    //gameInstance = new GameInstance(gameThreads);
 
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            game = new GameLogic(gameInstance);
-                            game.startGame();
-
-                        }
-                    }).start();
                 }
             } catch (IOException e) {
                 e.printStackTrace();

@@ -36,6 +36,14 @@ public class Client {
             System.out.println(message);
             out.writeObject("pass");
             out.flush();
+            message = (String) in.readObject();
+            System.out.println(message);
+            message = (String) in.readObject();
+            System.out.println(message);
+            out.writeObject("Table 4");
+            out.flush();
+
+
 
             while (running){
                 message = (String) in.readObject();
