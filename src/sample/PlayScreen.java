@@ -23,8 +23,6 @@ import java.util.ArrayList;
 //SOMETHING TO COMMIT
 public class PlayScreen extends Application{
 
-    //TEO VERSION AS OF 25.03.2017 23:54
-
     private int DIALOG_SIZE = 180;
 
     @Override
@@ -35,7 +33,7 @@ public class PlayScreen extends Application{
 
         primaryStage.setTitle("JavaFX 2 Login");
         GridPane bp = new GridPane();
-        bp.setGridLinesVisible(true);
+        //bp.setGridLinesVisible(true);
         bp.setPadding(new Insets(30,30,70,30));
         bp.setHgap(10);
         bp.setVgap(5);
@@ -79,10 +77,9 @@ public class PlayScreen extends Application{
 
     }
 
-
     private GridPane initializationTable(){
         GridPane tablePane = new GridPane();
-        tablePane.setGridLinesVisible(true);
+        //tablePane.setGridLinesVisible(true);
         tablePane.setPrefSize(1200, 700); // CU ASTEA NU NE JUCAM
 
         RowConstraints row1 = new RowConstraints();
@@ -129,18 +126,21 @@ public class PlayScreen extends Application{
             opponentsCards.add(cartiOponent);
         }
 
+        AnchorPane ap = new AnchorPane();
         ImageView dealerDeck = new ImageView(new Image(getClass().getResourceAsStream("/resources/deck/back.png")));
         //ImageView dealerDeck = new ImageView(new Image(getClass().getResourceAsStream("")));
 
         dealerDeck.setFitHeight(170);
         dealerDeck.setFitWidth(117);
 
+        ap.getChildren().add(dealerDeck);
+
         CardManager cartiDealer = new CardManager(0,5,0,0);
         cartiDealer.setOnMouseClicked(event -> {
             cartiDealer.addCard("/resources/deck/8 of Hearts.png");
         });
 
-        tablePane.add(dealerDeck, 3,0,1,1);
+        tablePane.add(ap, 3,0,1,1);
         tablePane.add(cartiDealer,2,0,1,1);
 
 
@@ -278,7 +278,7 @@ public class PlayScreen extends Application{
 
 
         //ImageView image = new ImageView(new Image(getClass().getResourceAsStream("src/resources/profile_picture.jpg"),100,100,true,true));
-        ImageView image = new ImageView(new Image(getClass().getResourceAsStream("resources/profile_picture.jpg"),100,100,true,true));
+        ImageView image = new ImageView(new Image(getClass().getResourceAsStream("/resources/profile_picture.jpg"),100,100,true,true));
         image.setFitHeight(40);
         image.setFitWidth(40);
 
