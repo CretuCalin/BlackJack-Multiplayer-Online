@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eb24d9fc-1c2b-4507-ae48-aefbca903ad4" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ProiectMDS/sample/PlayScreen$1.class" afterPath="$PROJECT_DIR$/out/production/ProiectMDS/sample/PlayScreen$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ProiectMDS/sample/PlayScreen.class" afterPath="$PROJECT_DIR$/out/production/ProiectMDS/sample/PlayScreen.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ProiectMDS/.idea/workspace.xml" afterPath="$PROJECT_DIR$/out/production/ProiectMDS/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/PlayScreen.java" afterPath="$PROJECT_DIR$/src/sample/PlayScreen.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,14 +18,58 @@
       <file leaf-file-name="PlayScreen.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/sample/PlayScreen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1088">
-              <caret line="234" column="33" lean-forward="false" selection-start-line="234" selection-start-column="33" selection-end-line="234" selection-end-column="33" />
+            <state relative-caret-position="289">
+              <caret line="52" column="25" lean-forward="false" selection-start-line="52" selection-start-column="25" selection-end-line="52" selection-end-column="25" />
               <folding>
-                <element signature="method#initializationTable#0;class#PlayScreen#0" expanded="false" />
-                <element signature="method#initializationBoard#0;class#PlayScreen#0" expanded="false" />
                 <element signature="method#ininializationChat#0;class#PlayScreen#0" expanded="false" />
+                <element signature="e#13974#13975#0" expanded="true" />
+                <element signature="e#14002#14003#0" expanded="true" />
               </folding>
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="2 of Clubs.png" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/resources/deck/2 of Clubs.png">
+          <provider selected="true" editor-type-id="images">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CardManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sample/CardManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="952">
+              <caret line="62" column="44" lean-forward="false" selection-start-line="62" selection-start-column="44" selection-end-line="62" selection-end-column="44" />
+              <folding>
+                <element signature="e#1866#1867#0" expanded="true" />
+                <element signature="e#1905#1906#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="table.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/resources/table.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1615">
+              <caret line="95" column="1" lean-forward="false" selection-start-line="95" selection-start-column="1" selection-end-line="95" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="masa.jpeg" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/resources/masa.jpeg">
+          <provider selected="true" editor-type-id="images">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="3 of Diamonds.png" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/resources/deck/3 of Diamonds.png">
+          <provider selected="true" editor-type-id="images">
+            <state />
           </provider>
         </entry>
       </file>
@@ -42,6 +81,14 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>pack</find>
+      <find>addCard</find>
+      <find>grid</find>
+      <find>setGridLinesVisible</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -56,6 +103,7 @@
       <list>
         <option value="$PROJECT_DIR$/sample/PlayScreen.java" />
         <option value="$PROJECT_DIR$/sample/CardManager.java" />
+        <option value="$PROJECT_DIR$/src/resources/table.css" />
         <option value="$PROJECT_DIR$/src/sample/CardManager.java" />
         <option value="$PROJECT_DIR$/src/sample/PlayScreen.java" />
       </list>
@@ -88,7 +136,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -139,8 +189,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -150,6 +198,11 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Rares\Documents\GitHub\ProiectMDS\src\resources" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -642,12 +695,21 @@
       <workItem from="1492275744090" duration="13000" />
       <workItem from="1493881291653" duration="23000" />
       <workItem from="1493881400594" duration="315000" />
-      <workItem from="1495052457096" duration="278000" />
+      <workItem from="1495052457096" duration="7288000" />
+      <workItem from="1495381349574" duration="8000" />
     </task>
+    <task id="LOCAL-00001" summary="Added some textlabels.&#10;Corrected some Widths Heights.">
+      <created>1495059092426</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1495059092426</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3268000" />
+    <option name="totallyTimeSpent" value="10286000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -668,10 +730,10 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32921347" sideWeight="0.503125" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298731" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32921347" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32921347" sideWeight="0.496875" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298731" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -700,7 +762,8 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="Added some textlabels.&#10;Corrected some Widths Heights." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added some textlabels.&#10;Corrected some Widths Heights." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -716,9 +779,55 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="method#initializationTable#0;class#PlayScreen#0" expanded="false" />
-            <element signature="method#initializationBoard#0;class#PlayScreen#0" expanded="false" />
             <element signature="method#ininializationChat#0;class#PlayScreen#0" expanded="false" />
+            <element signature="e#13974#13975#0" expanded="true" />
+            <element signature="e#14002#14003#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/deck/2 of Clubs.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/CardManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="952">
+          <caret line="62" column="44" lean-forward="false" selection-start-line="62" selection-start-column="44" selection-end-line="62" selection-end-column="44" />
+          <folding>
+            <element signature="e#1866#1867#0" expanded="true" />
+            <element signature="e#1905#1906#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/table.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1615">
+          <caret line="95" column="1" lean-forward="true" selection-start-line="95" selection-start-column="1" selection-end-line="95" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/masa.jpeg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/deck/3 of Diamonds.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/PlayScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="method#ininializationChat#0;class#PlayScreen#0" expanded="false" />
+            <element signature="e#13974#13975#0" expanded="true" />
+            <element signature="e#14002#14003#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -728,9 +837,9 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="method#initializationTable#0;class#PlayScreen#0" expanded="false" />
-            <element signature="method#initializationBoard#0;class#PlayScreen#0" expanded="false" />
             <element signature="method#ininializationChat#0;class#PlayScreen#0" expanded="false" />
+            <element signature="e#13974#13975#0" expanded="true" />
+            <element signature="e#14002#14003#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -740,9 +849,9 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="method#initializationTable#0;class#PlayScreen#0" expanded="false" />
-            <element signature="method#initializationBoard#0;class#PlayScreen#0" expanded="false" />
             <element signature="method#ininializationChat#0;class#PlayScreen#0" expanded="false" />
+            <element signature="e#13974#13975#0" expanded="true" />
+            <element signature="e#14002#14003#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -752,9 +861,9 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="method#initializationTable#0;class#PlayScreen#0" expanded="false" />
-            <element signature="method#initializationBoard#0;class#PlayScreen#0" expanded="false" />
             <element signature="method#ininializationChat#0;class#PlayScreen#0" expanded="false" />
+            <element signature="e#13974#13975#0" expanded="true" />
+            <element signature="e#14002#14003#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -793,14 +902,48 @@
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Temp/Temp1_zzzz.zip/ProiectMDS-frontend/src/sample/PlayScreen.java" />
+    <entry file="file://$PROJECT_DIR$/src/resources/deck/2 of Clubs.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/masa.jpeg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/deck/3 of Diamonds.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/table.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1615">
+          <caret line="95" column="1" lean-forward="false" selection-start-line="95" selection-start-column="1" selection-end-line="95" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/CardManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="952">
+          <caret line="62" column="44" lean-forward="false" selection-start-line="62" selection-start-column="44" selection-end-line="62" selection-end-column="44" />
+          <folding>
+            <element signature="e#1866#1867#0" expanded="true" />
+            <element signature="e#1905#1906#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/PlayScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1088">
-          <caret line="234" column="33" lean-forward="false" selection-start-line="234" selection-start-column="33" selection-end-line="234" selection-end-column="33" />
+        <state relative-caret-position="289">
+          <caret line="52" column="25" lean-forward="false" selection-start-line="52" selection-start-column="25" selection-end-line="52" selection-end-column="25" />
           <folding>
-            <element signature="method#initializationTable#0;class#PlayScreen#0" expanded="false" />
-            <element signature="method#initializationBoard#0;class#PlayScreen#0" expanded="false" />
             <element signature="method#ininializationChat#0;class#PlayScreen#0" expanded="false" />
+            <element signature="e#13974#13975#0" expanded="true" />
+            <element signature="e#14002#14003#0" expanded="true" />
           </folding>
         </state>
       </provider>

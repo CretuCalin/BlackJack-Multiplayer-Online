@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public class PlayScreen extends Application{
 
     private int DIALOG_SIZE = 180;
+    ArrayList<CardManager> opponentsCards;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -40,7 +41,7 @@ public class PlayScreen extends Application{
 
 
         //Adding Panes
-
+        /*
         GridPane chatPane = ininializationChat();
 
         BorderPane gridPaneChat = new BorderPane();
@@ -48,7 +49,7 @@ public class PlayScreen extends Application{
         gridPaneChat.setBottom(chatPane);
 
         bp.add(gridPaneChat,1,0,1,2);
-
+           */
         GridPane tablePane = initializationTable();
         bp.add(tablePane,0,0);
 
@@ -108,7 +109,7 @@ public class PlayScreen extends Application{
         column6.setPercentWidth(16.66);
         tablePane.getColumnConstraints().addAll(column1,column2,column3,column4,column5,column6);
 
-        ArrayList<CardManager> opponentsCards = new ArrayList<>();
+        opponentsCards = new ArrayList<>();
 
         int x = 3;
         for(int i = 0; i < 6; i++){
@@ -130,8 +131,8 @@ public class PlayScreen extends Application{
         ImageView dealerDeck = new ImageView(new Image(getClass().getResourceAsStream("/resources/deck/back.png")));
         //ImageView dealerDeck = new ImageView(new Image(getClass().getResourceAsStream("")));
 
-        dealerDeck.setFitHeight(170);
-        dealerDeck.setFitWidth(117);
+        dealerDeck.setFitHeight(145.20);
+        dealerDeck.setFitWidth(100);
 
         ap.getChildren().add(dealerDeck);
 
@@ -216,11 +217,17 @@ public class PlayScreen extends Application{
         buttonPane.setPadding(new Insets(5,5,5,5));
 
         Button hitButton = new Button("Hit!");
+        hitButton.setOnMouseClicked(event -> {
+            Controller.getInstance().hitRequest(carti);
+        });
         hitButton.setPrefSize(200, 50);
         hitButton.setAlignment(Pos.CENTER);
         hitButton.setId("btnSendMessage");
 
         Button standButton = new Button("Stand!");
+        standButton.setOnMouseClicked(event -> {
+            Controller.getInstance().standRequest(carti);
+        });
         standButton.setPrefSize(200, 50);
         standButton.setAlignment(Pos.CENTER);
         standButton.setId("btnSendMessage");
@@ -421,6 +428,13 @@ public class PlayScreen extends Application{
         sendButtonMessage.setId("btnSendMessage");
 
         return chatPane;
+    }
+
+    public void changeCards(int playerNumber, String cardAdded, String newResult){
+        opponentsCards.get(playerNumber).addCard(cardAdded);
+        opponentsCards.get(playerNumber).setResult(newResult);
+        //6 este dealerul
+        //7 este playerul
     }
 
     public static void main(String[] args) {

@@ -1,8 +1,10 @@
 package sample;
 
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -20,7 +22,7 @@ public class CardManager extends AnchorPane{
 
     Double numberOfCardsInHand;
 
-    Text result;
+    Text resultText;
 
     public CardManager(double left, double right, double top, double bottom){
         this.left = left;
@@ -29,21 +31,28 @@ public class CardManager extends AnchorPane{
         this.bottom = bottom;
         numberOfCardsInHand = 0.0;
 
-        result = new Text("Playing...");
-        result.setFont(Font.font("Veranda", 20));
-        result.setId("myMessagePane");
+        resultText = new Text("Playing...");
+        resultText.setFont(Font.font("Veranda", 20));
+        resultText.setId("myMessagePane");
 
-        AnchorPane.setTopAnchor(result, 160.0);
-        AnchorPane.setLeftAnchor(result, 55.0);
-        AnchorPane.setBottomAnchor(result, 0.0);
-        AnchorPane.setRightAnchor(result, 0.0);
+        StackPane resultPane = new StackPane();
+        resultPane.setAlignment(resultText, Pos.CENTER);
+        resultPane.getChildren().add(resultText);
+        //resultPane.setOpacity(0.5);
+        //resultText.setOpacity(1.0);
+        resultPane.setStyle("-fx-background-color: rgba(198, 159, 94, 0.75); -fx-background-radius: 10;");
 
-        this.getChildren().add(result);
+        AnchorPane.setTopAnchor(resultPane, 160.0);
+        AnchorPane.setLeftAnchor(resultPane, 0.0);
+        AnchorPane.setBottomAnchor(resultPane, 0.0);
+        AnchorPane.setRightAnchor(resultPane, 0.0);
+
+        this.getChildren().add(resultPane);
     }
 
     public void addCard(String cardAddress){
         if(numberOfCardsInHand < 5) {
-            Image image = new Image("/resources/deck/2 of Clubs.png");
+            Image image = new Image("/resources/deck/7 of Clubs.png");
             ImageView iv1 = new ImageView();
             iv1.setFitHeight(145.20);
             iv1.setFitWidth(100);
@@ -59,16 +68,16 @@ public class CardManager extends AnchorPane{
 
             this.getChildren().add(iv1);
 
-            if(numberOfCardsInHand == 4){
-                result.setText("Hand Full");
+            if(numberOfCardsInHand == 5){
+                resultText.setText("Hand Full");
             }
         }
         else{
-            result.setText("Hand Full");
+            resultText.setText("Hand Full");
         }
     }
 
     public void setResult(String message){
-        result.setText(message);
+        resultText.setText(message);
     }
 }
