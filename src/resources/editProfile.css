@@ -1,0 +1,46 @@
+#root {
+
+ -fx-background-color: #C69F5E;
+ -fx-border-radius: 0;
+-fx-padding: 10 10 10 10;
+-fx-background-radius: 20;
+}
+
+ 
+
+#bp {
+-fx-background-image: url("/resources/background_login_big.jpg");
+
+
+}
+
+
+#textField {
+    -fx-text-box-border: transparent;
+    -fx-background-color: #FDF2DE;
+    -fx-text-fill:  #663F15;
+    -fx-border-radius: 0;
+    -fx-padding: 5 5 5 5;
+    -fx-background-radius: 5;
+    -fx-max-width: 310;
+
+
+}
+
+
+
+
+#textNote {
+    -fx-text-fill: #C69F5E;
+}
+
+#btnLogout {
+    -fx-background-color: linear-gradient(#D68910   , #DC7633  );
+    -fx-text-fill:  #ffffff;
+}
+
+
+#btnEditProfile {
+    -fx-background-color: linear-gradient(#BA4A00  , #6E2C00 );
+    -fx-text-fill:  #ffffff;
+}
