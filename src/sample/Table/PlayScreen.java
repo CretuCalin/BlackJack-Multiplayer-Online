@@ -1,4 +1,4 @@
-package sample;
+package sample.Table;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,19 +16,31 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-import sample.*;
+import sample.Controller;
+import sample.Table.CardManager;
 
 import java.util.ArrayList;
 
 //SOMETHING TO COMMIT
-public class PlayScreen extends Application{
+public class PlayScreen {
 
     private int DIALOG_SIZE = 180;
     ArrayList<CardManager> opponentsCards;
+    private static PlayScreen instance;
+    Stage primaryStage;
 
-    @Override
-    public void start(Stage primaryStage) throws Exception{
+    PlayScreen(){
+        start();
+    }
 
+    public static PlayScreen getInstance(){
+        if(instance == null){
+            instance = new PlayScreen();
+        }
+        return instance;
+    }
+
+    private void start(){
 
         //Basic Pane
 
@@ -436,9 +448,4 @@ public class PlayScreen extends Application{
         //6 este dealerul
         //7 este playerul
     }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
 }

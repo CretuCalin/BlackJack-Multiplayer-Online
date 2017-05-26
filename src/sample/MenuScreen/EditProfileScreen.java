@@ -1,4 +1,4 @@
-package sample;
+package sample.MenuScreen;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;

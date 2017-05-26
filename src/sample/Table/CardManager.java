@@ -1,4 +1,4 @@
-package sample;
+package sample.Table;
 
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;

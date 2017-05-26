@@ -20,6 +20,7 @@ public class ConnectionController {
     }
 
     public ConnectionController() {
+        /*
         try {
             socket = new Socket("192.168.1.137", 9998);
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -35,6 +36,7 @@ public class ConnectionController {
         catch(ClassNotFoundException e){
             e.printStackTrace();
         }
+        */
     }
 
     public String requestHit(){
@@ -59,5 +61,15 @@ public class ConnectionController {
             e.printStackTrace();
         }
         return s;
+    }
+
+    public boolean sendLoginData(String text, String text1) {
+        //TODO Implement
+        System.out.println(text+ " " + text1);
+        return true;
+    }
+
+    public void createTable(String tableName, String numberOfPlayers, String timeOfMoves, boolean privacy, String password){
+
     }
 }

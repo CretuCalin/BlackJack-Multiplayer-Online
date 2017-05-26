@@ -10,7 +10,7 @@ public class RulesBlackjack {
     ArrayList<String> rules ;
 
 
-    RulesBlackjack(){
+    public RulesBlackjack(){
         ArrayList<String> rules = new ArrayList<String>();
         rules.add("Blackjack, also known as 21, is the most popular casino-banked game in the world. The objective when playing blackjack is to get as close to 21 as you can with any number of cards.");
         rules.add("The game begins with the player(s) placing a bet in his/her allocate bet box.  The dealer will then deal all participating players 2 cards (both facing up) as well as 2 cards to him/her self (only 1 facing up). ");

@@ -1,14 +1,11 @@
-package sample;
+package sample.MenuScreen;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
@@ -21,21 +18,29 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-
-import java.sql.Array;
-import java.util.ArrayList;
+import sample.Controller;
+import sample.Login.LoginScreen;
+import sample.RulesBlackjack;
 
 /**
  * Created by teo on 14.03.2017.
  */
-public class LobbyScreen  {
+public class LobbyScreen {
 
+    private static LobbyScreen instance = null;
 
+    public static LobbyScreen getInstance(){
+        if(instance == null){
+            instance = new LobbyScreen();
+        }
+        return instance;
+    }
 
+    public LobbyScreen(){
+        display();
+    }
 
     public void display(){
-
 
         //Basic Pane
 
@@ -138,10 +143,6 @@ public class LobbyScreen  {
 
 
     }
-
-
-
-
 
     GridPane ininializationChat(){
 
@@ -422,17 +423,6 @@ public class LobbyScreen  {
         VBox menuPane = new VBox();
         menuPane.setPrefSize(10,370);
 
-
-
-
-
-
-
-
-
-
-
-
         HBox buttonsMenu = new HBox();
         buttonsMenu.setPrefSize(650,45);
 
@@ -650,6 +640,16 @@ public class LobbyScreen  {
                 buttonsPane.setVgap(5);
 
                 Button createTableButton = new Button("Create Table");
+                createTableButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Controller.getInstance().createTable(txtTableName.getText(),
+                                (String) choiceNumberPlayers.getSelectionModel().getSelectedItem(),
+                                (String) choiceMoveText.getSelectionModel().getSelectedItem(),
+                                checkPrivateTable.isSelected(),
+                                txtPasswordPrivateTable.getText());
+                    }
+                });
                 createTableButton.setPrefSize(90,10);
                 createTableButton.setId("btnEditProfile");
 
@@ -900,9 +900,6 @@ public class LobbyScreen  {
 
         return profilePane;
     }
-
-
-
 
     void tableInitialization(VBox discution, String color){
         GridPane messagePane = new GridPane();

@@ -1,6 +1,5 @@
-package sample;
+package sample.Login;
 
-import Controller.ControllerLoginScreen;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,6 +18,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import sample.ConnectionController;
+import sample.MenuScreen.LobbyScreen;
 
 public class LoginScreen {
 
@@ -27,20 +28,23 @@ public class LoginScreen {
     private Button btnLogin;
     private Label linkSignUp;
     private Label forgotPassword;
-    private ControllerLoginScreen controller;
+    TextField txtUserName;
+    PasswordField pf;
+    Stage primaryStage;
 
-    LoginScreen(){
-        btnLogin = new Button();
-        linkSignUp = new Label();
-        forgotPassword = new Label();
+    public LoginScreen(){
+
     }
 
+    //@Override
+    //public void start(Stage primaryStage) throws Exception {
+    //    this.display();
+    //}
 
 
     public void display(){
-        controller = new ControllerLoginScreen();
-        Stage primaryStage = new Stage();
-        primaryStage.setTitle("JavaFX 2 Login");
+        primaryStage = new Stage();
+        primaryStage.setTitle("Login Screen");
         BorderPane bp = new BorderPane();
         bp.setPadding(new Insets(120,300,160,300));
         bp.setPrefSize(1600,870);
@@ -85,7 +89,7 @@ public class LoginScreen {
         textUsername.setFont(Font.font("Courier New", FontWeight.BOLD, 16));
         textUsername.setTextFill(Color.web("663F15"));
 
-        final TextField txtUserName = new TextField();
+        txtUserName = new TextField();
         txtUserName.setFocusTraversable(false);
         txtUserName.setFont(Font.font("Courier New", FontWeight.NORMAL, 15));
 
@@ -93,7 +97,7 @@ public class LoginScreen {
         textPassword.setFont(Font.font("Courier New", FontWeight.BOLD, 16));
         textPassword.setTextFill(Color.web("663F15"));
 
-        final PasswordField pf = new PasswordField();
+        pf = new PasswordField();
         pf.setFocusTraversable(false);
         pf.setFont(Font.font("Courier New", FontWeight.NORMAL, 15));
 
@@ -158,7 +162,14 @@ public class LoginScreen {
         //Actions for buttons and texts
 
 
-        btnLogin.setOnAction((EventHandler<ActionEvent>) new ControllerLoginScreen());
+        btnLogin.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(loginAllowed()){
+                    LobbyScreen.getInstance();
+                }
+            }
+        });
 
         forgotPassword.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -246,7 +257,11 @@ public class LoginScreen {
         return forgotPassword;
     }
 
-
+    private boolean loginAllowed(){
+        if(ConnectionController.getInstance().sendLoginData(txtUserName.getText(),pf.getText()))
+            return true;
+        return false;
+    }
 
     public Button getBtnLogin() {
         return btnLogin;
