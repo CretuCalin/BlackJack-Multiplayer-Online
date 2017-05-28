@@ -7,8 +7,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
-import javax.swing.*;
+import sample.ConnectionController;
+import pojo.Card;
 
 /**
  * Created by Rares on 4/15/2017.
@@ -19,6 +19,9 @@ public class CardManager extends AnchorPane{
     double right;
     double top;
     double bottom;
+    String username = "";
+    int total = 0;
+    int id = -1;
 
     Double numberOfCardsInHand;
 
@@ -31,7 +34,18 @@ public class CardManager extends AnchorPane{
         this.bottom = bottom;
         numberOfCardsInHand = 0.0;
 
-        resultText = new Text("Playing...");
+        this.username = ConnectionController.getInstance().getSomeText();
+        if(!username.equals("Dealer")) {
+            id = ConnectionController.getInstance().getSomeInt();
+        }
+        addCard(ConnectionController.getInstance().getSomeCard());
+        if(!username.equals("Dealer")) {
+            addCard(ConnectionController.getInstance().getSomeCard());
+            total = ConnectionController.getInstance().getSomeInt();
+        }
+
+
+        resultText = new Text(username);
         resultText.setFont(Font.font("Veranda", 20));
         resultText.setId("myMessagePane");
 
@@ -50,9 +64,10 @@ public class CardManager extends AnchorPane{
         this.getChildren().add(resultPane);
     }
 
-    public void addCard(String cardAddress){
+    public void addCard(Card card){
         if(numberOfCardsInHand < 5) {
-            Image image = new Image("/resources/deck/7 of Clubs.png");
+            System.out.println("/resources/deck/" + card.toString() + ".png");
+            Image image = new Image("/resources/deck/" + card.toString() + ".png");
             ImageView iv1 = new ImageView();
             iv1.setFitHeight(145.20);
             iv1.setFitWidth(100);

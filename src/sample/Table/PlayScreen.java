@@ -16,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import sample.ConnectionController;
 import sample.Controller;
 import sample.Table.CardManager;
 
@@ -28,8 +29,11 @@ public class PlayScreen {
     ArrayList<CardManager> opponentsCards;
     private static PlayScreen instance;
     Stage primaryStage;
+    int myPlayerNumber = -1;
+    int numberOfPlayers = 0;
 
-    PlayScreen(){
+    private PlayScreen(){
+        getPreliminaryInfo();
         start();
     }
 
@@ -40,13 +44,20 @@ public class PlayScreen {
         return instance;
     }
 
+    private void getPreliminaryInfo(){
+        myPlayerNumber = ConnectionController.getInstance().getSomeInt();
+        numberOfPlayers = ConnectionController.getInstance().getSomeInt();
+
+        System.out.println(myPlayerNumber);
+        System.out.println(numberOfPlayers);
+    }
+
     private void start(){
 
         //Basic Pane
-
+        primaryStage = new Stage();
         primaryStage.setTitle("JavaFX 2 Login");
         GridPane bp = new GridPane();
-        //bp.setGridLinesVisible(true);
         bp.setPadding(new Insets(30,30,70,30));
         bp.setHgap(10);
         bp.setVgap(5);
@@ -124,11 +135,8 @@ public class PlayScreen {
         opponentsCards = new ArrayList<>();
 
         int x = 3;
-        for(int i = 0; i < 6; i++){
+        for(int i = 0; i < numberOfPlayers; i++){
             CardManager cartiOponent = new CardManager(0,5,0,0);
-            cartiOponent.setOnMouseClicked(event -> {
-                cartiOponent.addCard("/resources/deck/8 of Hearts.png");
-            });
             cartiOponent.setPadding(new Insets(5));
             if(i < 3)
                 tablePane.add(cartiOponent,i,i+1,1,2);
@@ -141,7 +149,6 @@ public class PlayScreen {
 
         AnchorPane ap = new AnchorPane();
         ImageView dealerDeck = new ImageView(new Image(getClass().getResourceAsStream("/resources/deck/back.png")));
-        //ImageView dealerDeck = new ImageView(new Image(getClass().getResourceAsStream("")));
 
         dealerDeck.setFitHeight(145.20);
         dealerDeck.setFitWidth(100);
@@ -149,9 +156,6 @@ public class PlayScreen {
         ap.getChildren().add(dealerDeck);
 
         CardManager cartiDealer = new CardManager(0,5,0,0);
-        cartiDealer.setOnMouseClicked(event -> {
-            cartiDealer.addCard("/resources/deck/8 of Hearts.png");
-        });
 
         tablePane.add(ap, 3,0,1,1);
         tablePane.add(cartiDealer,2,0,1,1);
@@ -212,15 +216,13 @@ public class PlayScreen {
 
         //CARDS
 
-        //BorderPane carti = cardManager();
-        CardManager carti = new CardManager(0,5,0,0);
-        carti.setOnMouseClicked(event -> {
-            carti.addCard("/resources/deck/8 of Hearts.png");
-        });
+        CardManager carti = opponentsCards.get(0);
+
         HBox.setHgrow(carti, Priority.ALWAYS);
         carti.setPadding(new Insets(5));
         carti.setId("myMessagePane");
         localBoardPane.getChildren().add(carti);
+
         //BUTTONS
 
         GridPane buttonPane = new GridPane();
@@ -229,17 +231,11 @@ public class PlayScreen {
         buttonPane.setPadding(new Insets(5,5,5,5));
 
         Button hitButton = new Button("Hit!");
-        hitButton.setOnMouseClicked(event -> {
-            Controller.getInstance().hitRequest(carti);
-        });
         hitButton.setPrefSize(200, 50);
         hitButton.setAlignment(Pos.CENTER);
         hitButton.setId("btnSendMessage");
 
         Button standButton = new Button("Stand!");
-        standButton.setOnMouseClicked(event -> {
-            Controller.getInstance().standRequest(carti);
-        });
         standButton.setPrefSize(200, 50);
         standButton.setAlignment(Pos.CENTER);
         standButton.setId("btnSendMessage");
@@ -252,200 +248,5 @@ public class PlayScreen {
         localBoardPane.getChildren().add(buttonPane);
 
         return localBoardPane;
-    }
-
-    GridPane ininializationChat(){
-
-        GridPane chatPane = new GridPane();
-        //chatPane.setPrefSize(150,750);
-        GridPane.setHgrow(chatPane, Priority.ALWAYS);
-        chatPane.setHgap(10);
-        chatPane.setVgap(10);
-
-        VBox discution = new VBox();
-        discution.setSpacing(10);
-        discution.setPadding(new Insets(10));
-        ScrollPane sp = new ScrollPane();
-        sp.setPrefSize(100,900);
-        sp.setContent(discution);
-        sp.setPannable(true);
-        sp.setVvalue(1.0);
-
-        GridPane sentMessagePane = new GridPane();
-        sentMessagePane.setPrefSize(275,160);
-        sentMessagePane.setHgap(10);
-        sentMessagePane.setVgap(5);
-
-
-        GridPane myMessagePane = new GridPane();
-        myMessagePane.setPrefSize(240,180);
-        myMessagePane.setHgap(3);
-        myMessagePane.setVgap(5);
-
-
-
-        final TextField sendMessage = new TextField();
-        sendMessage.setFocusTraversable(false);
-        sendMessage.setPrefSize(210,180);
-
-        Button sendButtonMessage = new Button("Send");
-
-
-
-        myMessagePane.add(sendMessage,0,0);
-        myMessagePane.add(sendButtonMessage,1,0);
-
-
-        //ImageView image = new ImageView(new Image(getClass().getResourceAsStream("src/resources/profile_picture.jpg"),100,100,true,true));
-        ImageView image = new ImageView(new Image(getClass().getResourceAsStream("/resources/profile_picture.jpg"),100,100,true,true));
-        image.setFitHeight(40);
-        image.setFitWidth(40);
-
-
-
-        sentMessagePane.add(myMessagePane,0,0);
-        sentMessagePane.add(image,1,0);
-        chatPane.add(sp,0,0);
-        chatPane.add(sentMessagePane,0,1);
-
-        /////////////////////////////////////////////////////////////////////////
-
-        //ALA DE USER
-        GridPane messagePane = new GridPane();
-        messagePane.setPrefWidth(DIALOG_SIZE);
-        messagePane.setHgap(10);
-        messagePane.setVgap(5);
-
-        //ALA PORTOCALIU
-        GridPane textMessagePane = new GridPane();
-        textMessagePane.setPrefWidth(DIALOG_SIZE);
-        textMessagePane.setHgap(10);
-        textMessagePane.setVgap(1);
-
-
-
-
-        GridPane dataPane = new GridPane();
-        dataPane.setHgap(10);
-        dataPane.setVgap(10);
-
-        final Label name = new Label("Shakira");
-        name.setFocusTraversable(false);
-        name.setStyle("-fx-text-fill:  #ffffff;");
-        name.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
-
-        final Label time = new Label("02:53");
-        time.setFocusTraversable(false);
-        time.setStyle("-fx-text-fill:  #ffffff;");
-        time.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
-
-
-        dataPane.add(name,0,0);
-        dataPane.add(time,1,0);
-
-        final Label message = new Label();
-        message.setFocusTraversable(false);
-        message.setWrapText(true);
-        message.setText("Hi, Adam");
-        message.setStyle("-fx-text-fill:  #ffffff;");
-        message.setFont(Font.font("Courier New", FontWeight.BOLD, 16));
-
-
-        textMessagePane.add(dataPane,0,0);
-        textMessagePane.add(message,0,1);
-
-        ImageView imageProfileChat = new ImageView(new Image(getClass().getResourceAsStream("/resources/shakira.jpg"),100,100,true,true));
-        imageProfileChat.setFitHeight(40);
-        imageProfileChat.setFitWidth(40);
-
-        messagePane.add(textMessagePane,1,0);
-        messagePane.add(imageProfileChat,0,0);
-
-        discution.getChildren().add(messagePane);
-
-
-
-        ////////////////////////////////////////////////////////////////////////////
-
-
-
-
-        sendButtonMessage.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-
-                GridPane messagePane = new GridPane();
-                messagePane.setPrefWidth(DIALOG_SIZE);
-                messagePane.setHgap(10);
-                messagePane.setVgap(5);
-
-                GridPane textMessagePane = new GridPane();
-                textMessagePane.setPrefWidth(DIALOG_SIZE);
-                textMessagePane.setHgap(10);
-                textMessagePane.setVgap(1);
-
-
-                GridPane dataPane = new GridPane();
-                dataPane.setHgap(10);
-                dataPane.setVgap(10);
-
-                final Label name = new Label("Adam Levine");
-                name.setFocusTraversable(false);
-                name.setStyle("-fx-text-fill:  #ffffff;");
-                name.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
-
-                final Label time = new Label("02:55");
-                time.setFocusTraversable(false);
-                name.setStyle("-fx-text-fill:  #ffffff;");
-                time.setStyle("-fx-text-fill:  #ffffff;");
-                time.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
-
-                dataPane.add(name,0,0);
-                dataPane.add(time,1,0);
-
-                final Label message = new Label();
-                message.setFocusTraversable(false);
-                message.setWrapText(true);
-                message.setText(sendMessage.getText());
-                message.setStyle("-fx-text-fill:  #ffffff;");
-                message.setFont(Font.font("Courier New", FontWeight.BOLD, 16));
-
-
-                textMessagePane.add(dataPane,0,0);
-                textMessagePane.add(message,0,1);
-                textMessagePane.setId("myMessage");
-
-                ImageView imageProfileChat = new ImageView(new Image(getClass().getResourceAsStream("/resources/profile_picture.jpg"),100,100,true,true));
-                imageProfileChat.setFitHeight(40);
-                imageProfileChat.setFitWidth(40);
-
-                messagePane.add(textMessagePane,0,0);
-                messagePane.add(imageProfileChat,1,0);
-
-
-                discution.getChildren().add(messagePane);
-                sendMessage.setText("");
-                sp.setVvalue(1.0d);
-
-
-            }
-
-        });
-
-        textMessagePane.setId("yourMessage");
-        sp.setId("scroll-pane");
-        chatPane.setId("chat");
-        sendMessage.setId("sendMessage");
-        sendMessage.setId("myMessagePane");
-        myMessagePane.setId("myMessagePane");
-        sendButtonMessage.setId("btnSendMessage");
-
-        return chatPane;
-    }
-
-    public void changeCards(int playerNumber, String cardAdded, String newResult){
-        opponentsCards.get(playerNumber).addCard(cardAdded);
-        opponentsCards.get(playerNumber).setResult(newResult);
-        //6 este dealerul
-        //7 este playerul
     }
 }

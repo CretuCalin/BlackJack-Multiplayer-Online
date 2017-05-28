@@ -18,9 +18,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import pojo.TablesForClient;
+import sample.ConnectionController;
 import sample.Controller;
 import sample.Login.LoginScreen;
 import sample.RulesBlackjack;
+
+import java.util.ArrayList;
 
 /**
  * Created by teo on 14.03.2017.
@@ -28,6 +32,7 @@ import sample.RulesBlackjack;
 public class LobbyScreen {
 
     private static LobbyScreen instance = null;
+    private ArrayList<TablesForClient> arr = null;
 
     public static LobbyScreen getInstance(){
         if(instance == null){
@@ -36,13 +41,15 @@ public class LobbyScreen {
         return instance;
     }
 
-    public LobbyScreen(){
+    private LobbyScreen(){
         display();
     }
 
     public void display(){
 
         //Basic Pane
+
+        arr = ConnectionController.getInstance().getTablesList();
 
         Stage primaryStage = new Stage();
         primaryStage.setTitle("JavaFX 2 Login");
@@ -102,7 +109,7 @@ public class LobbyScreen {
         gridPaneLeft.add(text,0,0);
         gridPaneLeft.add(text1,0,1);
         gridPaneLeft.add(tutorialPane,0,4);
-        gridPaneLeft.add(chatPane,0,9);
+        //gridPaneLeft.add(chatPane,0,9);
 
         GridPane gridPaneRight = new GridPane();
         gridPaneRight.setPrefSize(800,1450);
@@ -470,21 +477,6 @@ public class LobbyScreen {
 
 
 
-        tableInitialization(menu,"#E3BE7F");
-        tableInitialization(menu,"#E7B663");
-        tableInitialization(menu,"#E3BE7F");
-        tableInitialization(menu,"#E7B663");
-        tableInitialization(menu,"#E3BE7F");
-
-
-
-
-
-
-
-
-
-
 
         menuPane.getChildren().add(buttonsMenu);
         menuPane.getChildren().add(menusp);
@@ -496,11 +488,9 @@ public class LobbyScreen {
                 menu.getChildren().clear();
                 menu.setSpacing(5);
                 menu.setStyle(null);
-                tableInitialization(menu,"#E3BE7F");
-                tableInitialization(menu,"#E7B663");
-                tableInitialization(menu,"#E3BE7F");
-                tableInitialization(menu,"#E7B663");
-                tableInitialization(menu,"#E3BE7F");
+                for(int i = 0; i < arr.size(); i++){
+                    tableInitialization(arr.get(i),menu,"#E3BE7F");
+                }
 
             }
         });
@@ -570,7 +560,7 @@ public class LobbyScreen {
                 textNumberPlayers.setId("textOptions");
 
                 ChoiceBox choiceNumberPlayers = new ChoiceBox(FXCollections.observableArrayList(
-                        "1 player","2 players", "3 players", "4 players","5 players","6 players","7 players")
+                        "1","2","3", "4","5","6","7")
                 );
                 choiceNumberPlayers.setPrefWidth(200);
                 choiceNumberPlayers.setId("textField");
@@ -704,6 +694,8 @@ public class LobbyScreen {
                 menu.setSpacing(1);
                 menu.setStyle(null);
                 rankingTopInitialization(menu, "#BA4A00");
+
+
                 rankInitialization(menu,"#E7B663",1,"Blake Shelton",301);
                 rankInitialization(menu,"#E3BE7F",2,"Gwen Stefani",202);
                 rankInitialization(menu,"#E7B663",3,"Alicia Keys",176);
@@ -889,7 +881,7 @@ public class LobbyScreen {
 
         logoutButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-
+                //TODO strica
                 LoginScreen gui = new LoginScreen();
                 gui.display();
                 Stage stage = (Stage) editButton.getScene().getWindow();
@@ -901,7 +893,7 @@ public class LobbyScreen {
         return profilePane;
     }
 
-    void tableInitialization(VBox discution, String color){
+    void tableInitialization(TablesForClient tbc, VBox discution, String color){
         GridPane messagePane = new GridPane();
         messagePane.setPrefWidth(595);
         // messagePane.setPrefSize(250,50);
@@ -933,7 +925,7 @@ public class LobbyScreen {
         image.setFitWidth(10);
 
 
-        final Label name = new Label("Table 1");
+        final Label name = new Label(tbc.getName());
         name.setFocusTraversable(false);
         name.setStyle("-fx-text-fill:  #663F15;");
         name.setFont(Font.font("Courier New", FontWeight.BOLD, 16));
@@ -950,6 +942,24 @@ public class LobbyScreen {
         playersPane.setVgap(10);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        int index = 2;
+        for(int i = 0; i < tbc.getPlayersNames().size(); i++){
+            ImageView image1 = new ImageView(new Image(getClass().getResourceAsStream("/resources/orange2.png"),100,100,true,true));
+            image1.setFitHeight(10);
+            image1.setFitWidth(10);
+
+            final Label name1 = new Label(tbc.getPlayersNames().get(i));
+            name1.setFocusTraversable(false);
+            name1.setStyle("-fx-text-fill:  #663F15;");
+            name1.setFont(Font.font("Courier New", FontWeight.BOLD, 13));
+
+            playersPane.add(image1,index,0);
+            playersPane.add(name1,index + 1,0);
+
+            index = index + 2;
+        }
+
+        /*
         ImageView image1 = new ImageView(new Image(getClass().getResourceAsStream("/resources/orange2.png"),100,100,true,true));
         image1.setFitHeight(10);
         image1.setFitWidth(10);
@@ -987,6 +997,7 @@ public class LobbyScreen {
         name4.setFont(Font.font("Courier New", FontWeight.BOLD, 13));
 
 
+
         playersPane.add(image1,2,0);
         playersPane.add(name1,3,0);
         playersPane.add(image2,4,0);
@@ -995,6 +1006,8 @@ public class LobbyScreen {
         playersPane.add(name3,7,0);
         playersPane.add(image4,8,0);
         playersPane.add(name4,9,0);
+
+*/
 
         HBox buttonPane = new HBox();
         buttonPane.setPrefSize(300,50);

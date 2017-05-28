@@ -1,7 +1,11 @@
 package sample;
 
+import pojo.Card;
+import pojo.TablesForClient;
+
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Created by Rares on 5/21/2017.
@@ -19,24 +23,18 @@ public class ConnectionController {
         return instance;
     }
 
-    public ConnectionController() {
-        /*
+    private ConnectionController() {
+
         try {
             socket = new Socket("192.168.1.137", 9998);
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectOutputStream.flush();
             objectInputStream = new ObjectInputStream(socket.getInputStream());
 
-            objectOutputStream.writeObject("Aici Rares");
-            System.out.print(objectInputStream.readObject());
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-        catch(ClassNotFoundException e){
-            e.printStackTrace();
-        }
-        */
+
     }
 
     public String requestHit(){
@@ -63,13 +61,111 @@ public class ConnectionController {
         return s;
     }
 
-    public boolean sendLoginData(String text, String text1) {
-        //TODO Implement
-        System.out.println(text+ " " + text1);
-        return true;
+    public String sendLoginData(String username, String password) {
+        String response = "";
+        try{
+            objectOutputStream.writeObject(username);
+            objectOutputStream.writeObject(password);
+            response = (String) objectInputStream.readObject();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        return response;
     }
 
-    public void createTable(String tableName, String numberOfPlayers, String timeOfMoves, boolean privacy, String password){
+    public void sendStartGame(){
+        try{
+            objectOutputStream.writeObject("START GAME");
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
 
+    }
+
+    public String getSomeText(){
+        String response = "";
+        try{
+            response = (String) objectInputStream.readObject();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    public int getSomeInt(){
+        int response = -1;
+        try{
+            response = (int) objectInputStream.readObject();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    public Card getSomeCard(){
+        Card card = null;
+        try{
+            card = (Card) objectInputStream.readObject();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        return card;
+    }
+
+
+
+    public int createTable(String tableName,
+                           String numberOfPlayers,
+                           String timeOfMoves,
+                           boolean privacy,
+                           String password){
+        int idTable = 0;
+        try{
+            objectOutputStream.writeObject("CREATE TABLE");
+            objectOutputStream.writeObject(tableName);
+            objectOutputStream.writeObject(numberOfPlayers);
+            //objectOutputStream.writeObject(timeOfMoves);
+            objectOutputStream.writeObject(privacy);
+            objectOutputStream.writeObject(password);
+            idTable = (int) objectInputStream.readObject();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        return idTable;
+    }
+
+    public ArrayList<TablesForClient> getTablesList(){
+        ArrayList<TablesForClient> arr = null;
+        try{
+            arr = (ArrayList<TablesForClient>) objectInputStream.readObject();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        return arr;
     }
 }

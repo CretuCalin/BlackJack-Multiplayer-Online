@@ -32,15 +32,6 @@ public class LoginScreen {
     PasswordField pf;
     Stage primaryStage;
 
-    public LoginScreen(){
-
-    }
-
-    //@Override
-    //public void start(Stage primaryStage) throws Exception {
-    //    this.display();
-    //}
-
 
     public void display(){
         primaryStage = new Stage();
@@ -258,9 +249,14 @@ public class LoginScreen {
     }
 
     private boolean loginAllowed(){
-        if(ConnectionController.getInstance().sendLoginData(txtUserName.getText(),pf.getText()))
-            return true;
-        return false;
+        String response = ConnectionController.getInstance().sendLoginData(txtUserName.getText(),pf.getText());
+        System.out.println(response);
+        while(!response.equals("NEW ACCOUNT CREATED") && !response.equals("CORRECT AUTHENTICATION")){
+            response = ConnectionController.getInstance().sendLoginData(txtUserName.getText(),pf.getText());
+        }
+        primaryStage.hide();
+        return true;
+
     }
 
     public Button getBtnLogin() {
