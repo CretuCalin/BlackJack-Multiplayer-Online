@@ -14,7 +14,17 @@ public class Table {
     private ArrayList<PlayerCommunication> players;
     private int numberPlayers;
     private PlayerCommunication admin;
+
+    public boolean isPrivate() {
+        return type;
+    }
+
     private boolean type;
+
+    public String getPassword() {
+        return password;
+    }
+
     private String password;
 
     public int getID() {

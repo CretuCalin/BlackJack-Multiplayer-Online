@@ -2,6 +2,7 @@ package login;
 
 import pojo.Table;
 import pojo.TablesForClient;
+import pojo.User;
 
 import javax.xml.crypto.Data;
 import java.security.MessageDigest;
@@ -74,20 +75,21 @@ public class Database {
         return "An error has occurd";
     }
 
-    /*public boolean usernameExits(String username) {
-        String query = "Select Username from Users where Username=\"" + username + "\"";
+    public void addToTable(Table table, User user){
+        try (PreparedStatement statement = connection.prepareStatement(DatabaseData.insertIntoTable); PreparedStatement statement1 = connection.prepareStatement(DatabaseData.insertIntoPlayersFromTable)){
+            statement.setInt(1, table.getNumberPlayers());
+            statement.setInt(2,table.getID());
+            statement.executeUpdate();
 
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet results = statement.executeQuery(query);
+            statement1.setInt(1, table.getID());
+            statement1.setString(2, user.getUsername());
+            statement1.executeUpdate();
 
-            if (results.next())
-                return true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
-    }*/
+
+    }
 
     public boolean createNewUser(String username, String password) {
         String query = "Insert into Users (Username,Password,Points,Hash) values (?,?,?,?)";
@@ -138,10 +140,13 @@ public class Database {
     }
 
     public boolean createNewTable(Table table) {
-        //TODO save in Database
         try (PreparedStatement preparedStatement = connection.prepareStatement(DatabaseData.insertTable)){
-
-
+            preparedStatement.setInt(1, table.getID());
+            preparedStatement.setInt(2, table.getNumberPlayers());
+            preparedStatement.setBoolean(3, table.isPrivate());
+            preparedStatement.setString(4, table.getName());
+            preparedStatement.setString(5, table.getPassword());
+            preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -151,6 +156,22 @@ public class Database {
 
     public ArrayList<TablesForClient> getTables(){
         //TODO get name and players from DATABASE
+        ArrayList<TablesForClient> tables = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(DatabaseData.selectTables);ResultSet rs = statement.executeQuery()){
+            while (rs.next()){
+                TablesForClient table = new TablesForClient(rs.getString("Name"));
+                PreparedStatement statement1 = connection.prepareStatement(DatabaseData.selectPlayersForTables);
+                statement1.setInt(1, rs.getInt("TableID"));
+                ResultSet rs2 = statement1.executeQuery();
+                while (rs2.next()){
+                    table.addPlayersNames(rs2.getString("NamePlayer"));
+                }
+                tables.add(table);
+            }
+            return tables;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }

@@ -3,6 +3,7 @@ package managers;
 import login.Database;
 import pojo.Table;
 import pojo.TablesForClient;
+import pojo.User;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -44,6 +45,10 @@ public class DatabaseManager {
 
     public boolean addNewTable(Table table){
         return database.createNewTable(table);
+    }
+
+    public void addToTable(Table table, User user){
+        database.addToTable(table, user);
     }
 
     public ArrayList<TablesForClient> getTables(){

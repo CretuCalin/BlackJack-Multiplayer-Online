@@ -46,7 +46,7 @@ public class GameLogic {
         for(int i = 0; i < gameInstance.getNumberOfPlayers(); i++)
         {
             System.out.println("Your turn is ");
-            gameInstance.getThreads().get(i).sendToClient((i + 1));
+            gameInstance.getThreads().get(i).sendToClient(i + 1);
             gameInstance.getThreads().get(i).setTurn(i+1);
         }
 
@@ -98,7 +98,7 @@ public class GameLogic {
 
     public void notifyPlayers(){
         for (int i = 0; i < gameInstance.getNumberOfPlayers(); i++) {
-            gameInstance.getThreads().get(i).sendToClient(gameInstance.getTurn() + 1);
+            gameInstance.getThreads().get(i).sendToClient(gameInstance.getTurn()+1);
             gameInstance.getThreads().get(i).sendToClient(gameInstance.getThreads().get(gameInstance.getTurn()).getUser().getUsername());
         }
     }
@@ -188,7 +188,7 @@ public class GameLogic {
             player.setFinished(true);
         }
 
-        if (message.equals("HIT"))
+        else if (message.equals("HIT"))
         {
             hitCardAndCheckBust(player);
         }
@@ -196,12 +196,14 @@ public class GameLogic {
 
     public void hitCardAndCheckBust(PlayerCommunication player)
     {
+        System.out.println("Dau carte");
         Card card = deck.drawCard();
         player.addCard(card);
 
         for (int i = 0; i < gameInstance.getNumberOfPlayers(); i++)
         {
             gameInstance.getThreads().get(i).sendToClient(card);
+            gameInstance.getThreads().get(i).sendToClient(gameInstance.getThreads().get(i).getTotal());
         }
         if(player.getTotal() > 21)
         {

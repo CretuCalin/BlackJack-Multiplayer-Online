@@ -121,6 +121,7 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
                 String table = read();
                 Table tab = Table.existingTable(table);
                 user.setTable(tab);
+                DatabaseManager.getInstance().addToTable(tab, user);
             }
             else if(MessagesInterpreter.getInstance().wantsToCreateTable(message)) {
                 String table = read();
@@ -160,7 +161,6 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
             System.out.println("Login failed");
         }
         try {
-            //TODO sends list of tables
             sendToClient(Manager.getInstance().getTablesManager().printTables());
             enterATable();
 
@@ -179,12 +179,15 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
                     }).start();
                 }
             }
+            System.out.println(gameInstance.isGameStarted());
 
             while (isOnTable() && !isFinished()) {
-                if (gameInstance.getTurn() == this.turn && gameInstance.isGameStarted()  && !finished) {
+                //System.out.println("Asteeeept");
+                if ((gameInstance.getTurn()+1) == this.turn && gameInstance.isGameStarted()  && !finished) {
+                    System.out.println("Am asteeeeptat");
                     message = (String) input.readObject();
                     System.out.println(message);
-                    server.getGame().interpretMessage(this, message);
+                    game.interpretMessage(this, message);
                 }
                 if (!isOnTable()) {
                     break;
