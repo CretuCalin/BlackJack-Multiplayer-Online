@@ -45,6 +45,7 @@ public class CardManager extends AnchorPane{
         }
 
 
+
         resultText = new Text(username);
         resultText.setFont(Font.font("Veranda", 20));
         resultText.setId("myMessagePane");
@@ -62,6 +63,14 @@ public class CardManager extends AnchorPane{
         AnchorPane.setRightAnchor(resultPane, 0.0);
 
         this.getChildren().add(resultPane);
+    }
+
+    public String getUsername(){
+        return this.username;
+    }
+
+    public void setTotal(int x){
+        total = x;
     }
 
     public void addCard(Card card){

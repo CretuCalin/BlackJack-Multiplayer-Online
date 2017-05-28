@@ -11,6 +11,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -31,10 +32,13 @@ public class PlayScreen {
     Stage primaryStage;
     int myPlayerNumber = -1;
     int numberOfPlayers = 0;
+    Button hitButton;
+    Button standButton;
 
     private PlayScreen(){
         getPreliminaryInfo();
         start();
+        play();
     }
 
     public static PlayScreen getInstance(){
@@ -101,6 +105,26 @@ public class PlayScreen {
 
     }
 
+    private void play(){
+        for(int i = 0; i < numberOfPlayers; i++) {
+            int nowPlayerId = ConnectionController.getInstance().getSomeInt();
+            String nowPlayerUsername = ConnectionController.getInstance().getSomeText();
+
+            if (nowPlayerId == myPlayerNumber) {
+                hitButton.setDisable(false);
+                standButton.setDisable(false);
+
+                System.out.println("Sunt aici");
+
+
+                if(standButton.isPressed()) {
+                    hitButton.setDisable(true);
+                    standButton.setDisable(true);
+                }
+            }
+        }
+    }
+
     private GridPane initializationTable(){
         GridPane tablePane = new GridPane();
         //tablePane.setGridLinesVisible(true);
@@ -160,9 +184,6 @@ public class PlayScreen {
         tablePane.add(ap, 3,0,1,1);
         tablePane.add(cartiDealer,2,0,1,1);
 
-
-
-
         return tablePane;
     }
 
@@ -181,7 +202,7 @@ public class PlayScreen {
         image.setFitWidth(100);
         idInfo.add(image,0,0);
 
-        Label userName = new Label("Adam Levine");
+        Label userName = new Label(opponentsCards.get(myPlayerNumber - 1).getUsername());
         userName.setAlignment(Pos.CENTER);
         userName.setStyle("-fx-text-fill:  #ffffff;");
         userName.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
@@ -191,32 +212,10 @@ public class PlayScreen {
 
         localBoardPane.getChildren().add(idInfo);
 
-        //MONEY
-        GridPane cashPanel = new GridPane();
-        cashPanel.setPrefSize(200,200);
-        cashPanel.setId("myMessagePane");
-
-        ImageView coinsImage = new ImageView(new Image(getClass().getResourceAsStream("/resources/coins.png"),100,100,true,true));
-        coinsImage.setFitHeight(100);
-        coinsImage.setFitWidth(100);
-        cashPanel.add(coinsImage,0,0);
-
-        Label moneyAmount = new Label("250$");
-        moneyAmount.setAlignment(Pos.TOP_CENTER);
-        moneyAmount.setStyle("-fx-text-fill:  #ffffff;");
-        moneyAmount.setPrefSize(100, 15);
-        moneyAmount.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
-
-        cashPanel.add(moneyAmount,0,1);
-        cashPanel.setAlignment(Pos.CENTER);
-
-        localBoardPane.getChildren().add(cashPanel);
-
-
 
         //CARDS
 
-        CardManager carti = opponentsCards.get(0);
+        CardManager carti = opponentsCards.get(myPlayerNumber-1);
 
         HBox.setHgrow(carti, Priority.ALWAYS);
         carti.setPadding(new Insets(5));
@@ -230,15 +229,40 @@ public class PlayScreen {
         buttonPane.setVgap(10);
         buttonPane.setPadding(new Insets(5,5,5,5));
 
-        Button hitButton = new Button("Hit!");
+        hitButton = new Button("Hit!");
         hitButton.setPrefSize(200, 50);
         hitButton.setAlignment(Pos.CENTER);
         hitButton.setId("btnSendMessage");
+        hitButton.setDisable(true);
 
-        Button standButton = new Button("Stand!");
+        standButton = new Button("Stand!");
         standButton.setPrefSize(200, 50);
         standButton.setAlignment(Pos.CENTER);
         standButton.setId("btnSendMessage");
+        standButton.setDisable(true);
+
+        hitButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("ai dat click pe hit");
+                opponentsCards.get(myPlayerNumber - 1).addCard(ConnectionController.getInstance().requestHit());
+                int total = ConnectionController.getInstance().getSomeInt();
+                System.out.println(total);
+                opponentsCards.get(myPlayerNumber - 1).setTotal(total);
+                if(total >= 21){
+                    standButton.fire();
+                }
+            }
+        });
+
+        standButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                ConnectionController.getInstance().requestStand();
+                standButton.setVisible(false);
+                hitButton.setVisible(false);
+            }
+        });
 
         buttonPane.add(hitButton,0,0);
         buttonPane.add(standButton,0,1);

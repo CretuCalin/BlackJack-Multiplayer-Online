@@ -49,11 +49,6 @@ public class Controller {
         PlayScreen.getInstance();
     }
 
-    public void hitRequest(CardManager cardManager){
-        String response = ConnectionController.getInstance().requestHit();
-        //cardManager.addCard("/resources/deck/" + response + ".png");
-    }
-
     public void standRequest(CardManager cardManager){
         String response = ConnectionController.getInstance().requestStand();
         cardManager.setResult(response);

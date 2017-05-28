@@ -488,6 +488,7 @@ public class LobbyScreen {
                 menu.getChildren().clear();
                 menu.setSpacing(5);
                 menu.setStyle(null);
+                System.out.println(arr.size());
                 for(int i = 0; i < arr.size(); i++){
                     tableInitialization(arr.get(i),menu,"#E3BE7F");
                 }
@@ -806,7 +807,7 @@ public class LobbyScreen {
         profileInformation.setHgap(10);
         profileInformation.setVgap(5);
 
-        Label profileName = new Label("Adam Levine");
+        Label profileName = new Label();
         profileName.setFont(Font.font("Courier New", FontWeight.BOLD, 16));
         profileName.setTextFill(Color.web("663F15"));
 

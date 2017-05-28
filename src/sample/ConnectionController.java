@@ -26,7 +26,7 @@ public class ConnectionController {
     private ConnectionController() {
 
         try {
-            socket = new Socket("192.168.1.137", 9998);
+            socket = new Socket("192.168.10.141", 9998);
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectOutputStream.flush();
             objectInputStream = new ObjectInputStream(socket.getInputStream());
@@ -37,11 +37,12 @@ public class ConnectionController {
 
     }
 
-    public String requestHit(){
-        String s = "ERROR";
+    public Card requestHit(){
+        Card s = null;
         try{
-            objectOutputStream.writeObject("REQUEST HIT");
-            s = (String) objectInputStream.readObject();
+            System.out.println("Pus");
+            objectOutputStream.writeObject("HIT");
+            s = (Card) objectInputStream.readObject();
         }
         catch(Exception e){
             e.printStackTrace();
@@ -52,8 +53,8 @@ public class ConnectionController {
     public String requestStand(){
         String s = "ERROR";
         try{
-            objectOutputStream.writeObject("REQUEST STAND");
-            s = (String) objectInputStream.readObject();
+            objectOutputStream.writeObject("STAND");
+            //s = (String) objectInputStream.readObject();
         }
         catch(Exception e){
             e.printStackTrace();
