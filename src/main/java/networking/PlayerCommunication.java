@@ -3,10 +3,13 @@ package networking;
 import gamelogic.GameLogic;
 import gamelogic.PlayerBehaviour;
 import javafx.scene.control.Tab;
+import login.Database;
+import managers.DatabaseManager;
 import managers.Manager;
 import pojo.Table;
 import pojo.User;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,14 +25,24 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
     private ObjectInputStream input;
     private Socket socket;
     private Server server;
+
+    public User getUser() {
+        return user;
+    }
+
     private User user;
 
     private GameLogic game;
+    private GameInstance gameInstance;
 
     private String message;
+
     private int turn;
     private volatile boolean finished;
 
+    public void setTurn(int turn) {
+        this.turn = turn;
+    }
 
     public PlayerCommunication(User user, Server server, int turn, String name) {
 
@@ -58,6 +71,7 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
     public String read(){
         try {
             String message = (String) input.readObject();
+            System.out.println(message);
             return message;
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,15 +82,27 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
         return null;
     }
 
+    public boolean readBool(){
+        try {
+            boolean message = (boolean) input.readObject();
+            System.out.println(message);
+            return message;
+        } catch (IOException e) {
+            e.printStackTrace();
+            finished = true;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean verify(){
         try {
-            sendToClient("Username:" );
             user.setUsername(read());
-            sendToClient("Password");
             user.setPassword (read());
             String message = Manager.getInstance().getLoginManager().newPlayer(user);
             sendToClient(message);
-            if (message.equals("User Dosen't exist.") || message.equals("Wrong Password.") || message.equals("An error has occurd."))
+            if (message.equals("User Dosen't exist") || message.equals("Wrong Password") || message.equals("An error has occurd"))
                 return false;
             return true;
         } catch (NoSuchAlgorithmException e) {
@@ -87,21 +113,18 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
 
 
     private void enterATable() throws NoSuchAlgorithmException, IOException, ClassNotFoundException {
-        String table;
         if(!finished)
         {
-            sendToClient("Choose a table from:");
-            Manager.getInstance().getTablesManager().printTables();
             message = read();
             System.out.println(message);
-            table = MessagesInterpreter.getInstance().tableInterpreter(message);
-            Table tab = Table.existingTable(table);
-            if(tab != null){
+            if(MessagesInterpreter.getInstance().wantsToJoinTable(message)){
+                String table = read();
+                Table tab = Table.existingTable(table);
                 user.setTable(tab);
-                tab.addPlayer(this);
             }
-            else {
-                tab = createTable(table, this);
+            else if(MessagesInterpreter.getInstance().wantsToCreateTable(message)) {
+                String table = read();
+                Table tab = createTable(table, this);
                 user.setTable(tab);
                 user.setAdmin(true);
                 tab.addPlayer(this);
@@ -111,10 +134,12 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
     }
 
     public Table createTable(String name, PlayerCommunication player){
-        sendToClient("Numer of players");
         int n = Integer.parseInt(read());
-        Table table = new Table(n, name, player);
-        sendToClient("Table createad");
+        boolean custom = readBool();
+        String password = read();
+        Table table = new Table(n, name, player, custom, password);
+        DatabaseManager.getInstance().addNewTable(table);
+        sendToClient(table.getID());
         System.out.println("Table createad " + table.getName());
         return table;
     }
@@ -129,34 +154,39 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
     @Override
     public void run() {
 
+        while (!isFinished()){
+            if(verify())
+                break;
+            System.out.println("Login failed");
+        }
         try {
-            // waiting to enter a table
+            //TODO sends list of tables
+            sendToClient(Manager.getInstance().getTablesManager().printTables());
             enterATable();
 
             if(user.isAdmin()) {
-                sendToClient("Do we start the game?");
                 String message = read();
-                if(message.equals("NOW"));
-                GameInstance gameInstance = new GameInstance(user.getTable().getPlayers(), user.getTable().getNumberPlayers());
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
+                if(message.equals("START GAME")) {
+                    gameInstance = new GameInstance(user.getTable().getPlayers(), user.getTable().getNumberPlayers());
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
 
-                        game = new GameLogic(gameInstance);
-                        game.startGame();
-
-                    }
-                }).start();
+                            game = new GameLogic(gameInstance);
+                            game.startGame();
+                            user.setTable(null);
+                        }
+                    }).start();
+                }
             }
 
-            while (isOnTable()) {
-                if (server.getTurn() == this.turn && server.isGameStarted() && !finished) {
-                    sendToClient("Enter option: HIT/STAND");
+            while (isOnTable() && !isFinished()) {
+                if (gameInstance.getTurn() == this.turn && gameInstance.isGameStarted()  && !finished) {
                     message = (String) input.readObject();
                     System.out.println(message);
                     server.getGame().interpretMessage(this, message);
                 }
-                if (server.isGameOver()) {
+                if (!isOnTable()) {
                     break;
                 }
             }
@@ -173,6 +203,7 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
     public void sendToClient(Object object){
         try {
             output.writeObject(object);
+            System.out.println(object + " - sent");
             output.flush();
         } catch (IOException e) {
             e.printStackTrace();

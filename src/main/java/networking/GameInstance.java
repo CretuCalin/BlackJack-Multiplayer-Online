@@ -9,15 +9,19 @@ import java.util.ArrayList;
 public class GameInstance {
 
 
-    private PlayerCommunication[] threads;
+    private ArrayList<PlayerCommunication> threads;
     private int numberOfPlayers;
     private volatile int turn;
 
 
+    public boolean isGameStarted() {
+        return gameStarted;
+    }
+
     private volatile boolean gameStarted;
     private volatile boolean gameOver;
 
-    public GameInstance(PlayerCommunication[] threads, int n) {
+    public GameInstance(ArrayList<PlayerCommunication> threads, int n) {
         this.threads = threads;
         this.numberOfPlayers = n;
         this.turn = 0;
@@ -25,16 +29,12 @@ public class GameInstance {
 
 
 
-    public PlayerCommunication[] getThreads() {
+    public ArrayList<PlayerCommunication> getThreads() {
         return threads;
     }
 
-    public void setThreads(PlayerCommunication[] threads) {
-        this.threads = threads;
-    }
-
     public int getNumberOfPlayers() {
-        return numberOfPlayers;
+        return threads.size();
     }
 
     public void setNumberOfPlayers(int numberOfPlayers) {

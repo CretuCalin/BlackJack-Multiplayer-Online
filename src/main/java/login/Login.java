@@ -26,7 +26,7 @@ public class Login {
         }else{*/
             if (Manager.getInstance().CreateNewUser(username,password ))
                 //TEMPORARY
-                return "New account created";
+                return "NEW ACCOUNT CREATED";
             else
                 // TEMPORARY
                 return "Failed to create a new account";
@@ -37,13 +37,13 @@ public class Login {
     public String verify(String username, String password){
         try {
             String message = exists(username, password);
-            if (message.equals("User Dosen't exist.")){
+            if (message.equals("User Dosen't exist")){
                 return createUser(username, password);
             }
             return message;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            return "An error has occurd.";
+            return "An error has occurd";
         }
     }
 

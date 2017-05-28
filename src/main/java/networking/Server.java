@@ -31,19 +31,13 @@ public class Server {
     private ArrayList<PlayerCommunication> waiting;
     private ArrayList<PlayerCommunication> playing;
 
-    private int numberOfPlayersOfThisGame;
+    public static int numberOfPlayersOfThisGame;
     private int totalNumberOfPlayers;
     private volatile boolean running;
 
     private final int portNumber = 9998;
 
-    private volatile int turn;
-
-    private volatile boolean gameStarted;
-    private volatile boolean gameOver;
-
     private GameLogic game;
-    private GameInstance gameInstance ;
 
     private final int numberOfPlayersPerGame = 4;
 
@@ -55,8 +49,6 @@ public class Server {
         playing = new ArrayList<>();
         numberOfPlayersOfThisGame = 0;
         totalNumberOfPlayers = 0;
-        turn = 0;
-        gameStarted = false;
         running = true;
 
         try {
@@ -76,27 +68,24 @@ public class Server {
 
             try {
                 clientSocket = serverSocket.accept();
+                System.out.println("new client");
                 User user = new User(clientSocket);
                 PlayerCommunication player = new PlayerCommunication(user,this,numberOfPlayersOfThisGame,"Player " + (numberOfPlayersOfThisGame + 1));
-
-                while (!player.verify() && !player.isFinished()){
-                    System.out.println("Login failed\nRetry.");
-                }
-                if(player.isFinished())
-                    user.close();
-                else {
-                    waiting.add(player);
-                    threadPool.execute(player);
-
-                    totalNumberOfPlayers++;
-
-                }
+                threadPool.execute(player);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
 
+    }
+
+    public ArrayList<PlayerCommunication> getWaiting() {
+        return waiting;
+    }
+
+    public void addWaiting(PlayerCommunication player) {
+        waiting.add(player);
     }
 
     public static Socket getClientSocket() {
@@ -129,30 +118,6 @@ public class Server {
 
     public void setRunning(boolean running) {
         this.running = running;
-    }
-
-    public int getTurn() {
-        return turn;
-    }
-
-    public void setTurn(int turn) {
-        this.turn = turn;
-    }
-
-    public boolean isGameStarted() {
-        return gameStarted;
-    }
-
-    public void setGameStarted(boolean gameStarted) {
-        this.gameStarted = gameStarted;
-    }
-
-    public boolean isGameOver() {
-        return gameOver;
-    }
-
-    public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
     }
 
     public GameLogic getGame() {

@@ -1,10 +1,14 @@
 package login;
 
+import pojo.Table;
+import pojo.TablesForClient;
+
 import javax.xml.crypto.Data;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  Created by bobby on 27-04-2017.
@@ -25,7 +29,7 @@ public class Database {
         try {
             Class.forName("com.mysql.jdbc.Driver");
 
-            connection = DriverManager.getConnection("jdbc:mysql://ihatethis.ddns.net:3306/MDS?autoReconnect=true&useSSL=false", "bobby", "goodBYE1!");
+            connection = DriverManager.getConnection("jdbc:mysql://ihatethis.ddns.net:3306/MDS?autoReconnect=true&useSSL=false", "karla", "proiectMDS1!");
 
 
         } catch (Exception e) {
@@ -54,7 +58,7 @@ public class Database {
             if (results.next()) {
                 salt = results.getBytes(1);
             } else {
-                return "User Dosen't exist.";
+                return "User Dosen't exist";
             }
 
 
@@ -62,12 +66,12 @@ public class Database {
             results = statement.executeQuery(query);
 
             if (results.next())
-                return "Correct autentification.";
-            else  return "Wrong Password.";
+                return "CORRECT AUTHENTICATION";
+            else  return "Wrong Password";
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "An error has occurd.";
+        return "An error has occurd";
     }
 
     /*public boolean usernameExits(String username) {
@@ -133,4 +137,20 @@ public class Database {
         return salt;
     }
 
+    public boolean createNewTable(Table table) {
+        //TODO save in Database
+        try (PreparedStatement preparedStatement = connection.prepareStatement(DatabaseData.insertTable)){
+
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public ArrayList<TablesForClient> getTables(){
+        //TODO get name and players from DATABASE
+        return null;
+    }
 }

@@ -1,8 +1,11 @@
 package managers;
 
 import login.Database;
+import pojo.Table;
+import pojo.TablesForClient;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 
 /**
@@ -21,13 +24,13 @@ public class DatabaseManager {
 
     private static DatabaseManager instance;
 
-    protected static DatabaseManager getInstance(){
+    public static DatabaseManager getInstance(){
         if(instance == null)
             instance = new DatabaseManager();
         return instance;
     }
 
-    protected String userExits(String username, String password) throws NoSuchAlgorithmException {
+    public String userExits(String username, String password) throws NoSuchAlgorithmException {
         return database.userExits(username,password);
     }
 
@@ -35,10 +38,17 @@ public class DatabaseManager {
         return database.usernameExits(username);
     }*/
 
-    protected boolean createNewUser(String username, String password){
+    public boolean createNewUser(String username, String password){
         return database.createNewUser(username,password);
     }
 
+    public boolean addNewTable(Table table){
+        return database.createNewTable(table);
+    }
+
+    public ArrayList<TablesForClient> getTables(){
+        return database.getTables();
+    }
 
     public void close(){
         database.close();

@@ -9,14 +9,6 @@ public class Card implements Serializable{
 
     public static final long serialVerionUID = 1L;
 
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
     public int getValue() {
         return value;
     }
@@ -33,18 +25,12 @@ public class Card implements Serializable{
         this.suit = suit;
     }
 
-    private int points;
     private int value;
     private String suit;
 
     public Card(String type, int value){
         this.value = value;
-        this.suit = suit;
-        if(value < 12){
-            this.points = value;
-        }else{
-            this.points = 10;
-        }
+        this.suit = type;
     }
 
 
@@ -53,25 +39,30 @@ public class Card implements Serializable{
         String result = "";
         if(value == 11)
         {
-            result = "ace_of_" + suit;
+            result = "Ace of " + suit;
+            return result;
         }
         if(value == 12)
         {
-            result = "jack_of_" + suit;
+            result = "Jack of " + suit;
+            return result;
         }
         if(value == 13)
         {
-            result = "queen_of_" + suit;
+            result = "Queen of " + suit;
+            return result;
         }
         if(value == 14)
         {
-            result = "king_of_" + suit;
+            result = "King of " + suit;
+            return result;
         }
         if(value <= 10)
         {
-            result = value + "_of_" + suit;
+            result = value + " of " + suit;
+            return result;
         }
-        return result;
+        return value + " of " + suit;
     }
 
 

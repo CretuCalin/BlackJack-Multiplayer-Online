@@ -10,6 +10,7 @@ public class GameLogic {
 
     private Deck deck;
     private GameInstance gameInstance;
+    public boolean started = false;
 
     private PlayerBehaviour dealer;
 
@@ -18,6 +19,7 @@ public class GameLogic {
     {
         deck = new Deck();
         this.gameInstance = gameInstance;
+        started = true;
         dealer = new PlayerBehaviour("dealer");
     }
 
@@ -43,7 +45,9 @@ public class GameLogic {
 
         for(int i = 0; i < gameInstance.getNumberOfPlayers(); i++)
         {
-            gameInstance.getThreads()[i].sendToClient("Your turn is " + (i + 1));
+            System.out.println("Your turn is ");
+            gameInstance.getThreads().get(i).sendToClient((i + 1));
+            gameInstance.getThreads().get(i).setTurn(i+1);
         }
 
     }
@@ -54,9 +58,9 @@ public class GameLogic {
         for(int i = 0; i < gameInstance.getNumberOfPlayers(); i++)
         {
             card = deck.drawCard();
-            gameInstance.getThreads()[i].addCard(card);
+            gameInstance.getThreads().get(i).addCard(card);
             card = deck.drawCard();
-            gameInstance.getThreads()[i].addCard(card);
+            gameInstance.getThreads().get(i).addCard(card);
         }
 
         card = deck.drawCard();
@@ -70,36 +74,45 @@ public class GameLogic {
 
         for(int i = 0; i < gameInstance.getNumberOfPlayers(); i++)
         {
+            System.out.println("Players on the table:");
+            gameInstance.getThreads().get(i).sendToClient(gameInstance.getThreads().size());
             for(int j = 0; j < gameInstance.getNumberOfPlayers(); j++)
             {
-                gameInstance.getThreads()[j].sendToClient("Player " + (i + 1));
-                gameInstance.getThreads()[j].sendToClient(gameInstance.getThreads()[i].getCards().get(0));
-                gameInstance.getThreads()[j].sendToClient(gameInstance.getThreads()[i].getCards().get(1));
-                gameInstance.getThreads()[j].sendToClient(gameInstance.getThreads()[i].getTotal());
+                gameInstance.getThreads().get(i).sendToClient(gameInstance.getThreads().get(j).getUser().getUsername());
+                gameInstance.getThreads().get(i).sendToClient(i+1);
+                gameInstance.getThreads().get(i).sendToClient(gameInstance.getThreads().get(j).getCards().get(0));
+                gameInstance.getThreads().get(i).sendToClient(gameInstance.getThreads().get(j).getCards().get(1));
+                gameInstance.getThreads().get(i).sendToClient(gameInstance.getThreads().get(j).getTotal());
             }
 
         }
 
         for(int i = 0 ; i < gameInstance.getNumberOfPlayers(); i++)
         {
-            gameInstance.getThreads()[i].sendToClient("Dealer");
-            gameInstance.getThreads()[i].sendToClient(dealer.getCards().get(0));
+
+            gameInstance.getThreads().get(i).sendToClient("Dealer");
+            gameInstance.getThreads().get(i).sendToClient(dealer.getCards().get(0));
         }
 
     }
 
+    public void notifyPlayers(){
+        for (int i = 0; i < gameInstance.getNumberOfPlayers(); i++) {
+            gameInstance.getThreads().get(i).sendToClient(gameInstance.getTurn() + 1);
+            gameInstance.getThreads().get(i).sendToClient(gameInstance.getThreads().get(gameInstance.getTurn()).getUser().getUsername());
+        }
+    }
+
     public void playersTurn(){
 
-        for (int i = 0; i < gameInstance.getNumberOfPlayers(); i++)
-            gameInstance.getThreads()[i].sendToClient("Player " + (gameInstance.getTurn() + 1));
+        notifyPlayers();
         while(gameInstance.getTurn() < gameInstance.getNumberOfPlayers())
         {
-            if(gameInstance.getThreads()[gameInstance.getTurn()].isFinished())
+            if(gameInstance.getThreads().get(gameInstance.getTurn()).isFinished())
             {
                 gameInstance.setTurn(gameInstance.getTurn() + 1);
                 if (gameInstance.getTurn() < gameInstance.getNumberOfPlayers())
-                    for (int i = 0; i < gameInstance.getNumberOfPlayers(); i++)
-                        gameInstance.getThreads()[i].sendToClient("Player " + (gameInstance.getTurn() + 1));
+                    notifyPlayers();
             }
         }
 
@@ -109,8 +122,8 @@ public class GameLogic {
 
         for(int i = 0; i < gameInstance.getNumberOfPlayers(); i++)
         {
-            gameInstance.getThreads()[i].sendToClient("Dealer");
-            gameInstance.getThreads()[i].sendToClient(dealer.getCards().get(1));
+            gameInstance.getThreads().get(i).sendToClient("Dealer");
+            gameInstance.getThreads().get(i).sendToClient(dealer.getCards().get(1));
         }
         Card card;
 
@@ -120,7 +133,7 @@ public class GameLogic {
             dealer.addCard(card);
             for(int i = 0; i < gameInstance.getNumberOfPlayers(); i++)
             {
-                gameInstance.getThreads()[i].sendToClient(card);
+                gameInstance.getThreads().get(i).sendToClient(card);
             }
         }
 
@@ -130,8 +143,8 @@ public class GameLogic {
 
         int minimum = 22;
         for(int i = 0;i < gameInstance.getNumberOfPlayers(); i++)
-            if(minimum > gameInstance.getThreads()[i].getTotal())
-                minimum = gameInstance.getThreads()[i].getTotal();
+            if(minimum > gameInstance.getThreads().get(i).getTotal())
+                minimum = gameInstance.getThreads().get(i).getTotal();
         return minimum;
     }
 
@@ -139,29 +152,29 @@ public class GameLogic {
 
         for(int i = 0; i<gameInstance.getNumberOfPlayers(); i++)
         {
-            if(gameInstance.getThreads()[i].getTotal() <= 21)
+            if(gameInstance.getThreads().get(i).getTotal() <= 21)
             {
                 if(dealer.getTotal() <= 21)
                 {
-                    if(dealer.getTotal() > gameInstance.getThreads()[i].getTotal())
+                    if(dealer.getTotal() > gameInstance.getThreads().get(i).getTotal())
                     {
-                        gameInstance.getThreads()[i].sendToClient("Player " + (i + 1));
-                        gameInstance.getThreads()[i].sendToClient("LOSE");
+                        gameInstance.getThreads().get(i).sendToClient("Player " + (i + 1));
+                        gameInstance.getThreads().get(i).sendToClient("LOSE");
                     }
-                    else if (dealer.getTotal() == gameInstance.getThreads()[i].getTotal())
+                    else if (dealer.getTotal() == gameInstance.getThreads().get(i).getTotal())
                     {
-                        gameInstance.getThreads()[i].sendToClient("Player " + (i + 1));
-                        gameInstance.getThreads()[i].sendToClient("DRAW");
+                        gameInstance.getThreads().get(i).sendToClient("Player " + (i + 1));
+                        gameInstance.getThreads().get(i).sendToClient("DRAW");
                     }
                     else
                     {
-                        gameInstance.getThreads()[i].sendToClient("Player " + (i + 1));
-                        gameInstance.getThreads()[i].sendToClient("WIN");
+                        gameInstance.getThreads().get(i).sendToClient("Player " + (i + 1));
+                        gameInstance.getThreads().get(i).sendToClient("WIN");
                     }
                 }
                 else {
-                    gameInstance.getThreads()[i].sendToClient("Player " + (i + 1));
-                    gameInstance.getThreads()[i].sendToClient("Dealer Busted! You Win");
+                    gameInstance.getThreads().get(i).sendToClient("Player " + (i + 1));
+                    gameInstance.getThreads().get(i).sendToClient("Dealer Busted! You Win");
                 }
             }
         }
@@ -188,14 +201,14 @@ public class GameLogic {
 
         for (int i = 0; i < gameInstance.getNumberOfPlayers(); i++)
         {
-            gameInstance.getThreads()[i].sendToClient(card);
+            gameInstance.getThreads().get(i).sendToClient(card);
         }
         if(player.getTotal() > 21)
         {
             player.setFinished(true);
             for (int i = 0; i < gameInstance.getNumberOfPlayers(); i++)
             {
-                gameInstance.getThreads()[i].sendToClient("BUST");
+                gameInstance.getThreads().get(i).sendToClient("BUST");
             }
 
         }
@@ -203,7 +216,7 @@ public class GameLogic {
         {
             for (int i = 0; i < gameInstance.getNumberOfPlayers(); i++)
             {
-                gameInstance.getThreads()[i].sendToClient(player.getTotal());
+                gameInstance.getThreads().get(i).sendToClient(player.getTotal());
             }
 
         }
