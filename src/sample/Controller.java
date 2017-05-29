@@ -9,6 +9,7 @@ import sample.Table.CardManager;
 import sample.Table.PlayScreen;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -47,6 +48,32 @@ public class Controller {
             ConnectionController.getInstance().sendStartGame();
         }
         PlayScreen.getInstance();
+    }
+
+    public void joinTable(String tableName,String password){
+        try {
+            ConnectionController.getInstance().joinTable(tableName,password);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }/*
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Warning Dialog");
+        alert.setHeaderText("Look, a Warning Dialog");
+        alert.setContentText("Careful with the next step!");
+
+        alert.showAndWait();
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            ConnectionController.getInstance().sendStartGame();
+        }
+        PlayScreen.getInstance();
+        */
+        String message = (String) ConnectionController.getInstance().getSomeText();
+        if(message.equals("GAME STARTED")){
+            System.out.println("o sa plece");
+            PlayScreen.getInstance();
+        }
     }
 
     public void standRequest(CardManager cardManager){

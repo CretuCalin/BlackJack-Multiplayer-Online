@@ -1018,6 +1018,15 @@ public class LobbyScreen {
         buttonJoin.setStyle("-fx-background-color: linear-gradient(#C16E37  , #BA4A00 );-fx-text-fill:  #ffffff;");
         buttonJoin.setPrefSize(50,15);
 
+        buttonJoin.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                System.out.println(tbc.getName());
+                Controller.getInstance().joinTable(tbc.getName(),"pass");
+
+            }
+
+        });
+
 
 
 

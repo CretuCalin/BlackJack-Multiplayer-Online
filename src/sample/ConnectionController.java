@@ -26,7 +26,7 @@ public class ConnectionController {
     private ConnectionController() {
 
         try {
-            socket = new Socket("192.168.10.141", 9998);
+            socket = new Socket("10.11.48.101", 9998);
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectOutputStream.flush();
             objectInputStream = new ObjectInputStream(socket.getInputStream());
@@ -169,4 +169,11 @@ public class ConnectionController {
         }
         return arr;
     }
+
+    public void joinTable(String name,String password) throws IOException {
+        objectOutputStream.writeObject("JOIN TABLE");
+        objectOutputStream.writeObject(name);
+    }
+
+
 }
