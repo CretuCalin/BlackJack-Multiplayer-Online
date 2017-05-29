@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 /**
  Created by bobby on 27-04-2017.
@@ -45,6 +46,17 @@ public class Database {
             e.printStackTrace();
         }
     }
+
+    public boolean deletePlayersTest(int number) throws SQLException {
+        String query = "DELETE FROM Users ORDER BY UserID DESC limit ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1,number);
+
+        if (preparedStatement.executeUpdate()!=0)
+            return true;
+        return false;
+    }
+
 
     public String userExits(String username, String password) throws NoSuchAlgorithmException {
         try {
@@ -91,7 +103,7 @@ public class Database {
 
     }
 
-    public boolean createNewUser(String username, String password) {
+    public synchronized boolean  createNewUser(String username, String password) {
         String query = "Insert into Users (Username,Password,Points,Hash) values (?,?,?,?)";
 
         try {

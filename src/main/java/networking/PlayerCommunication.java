@@ -205,7 +205,7 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
 
     public void sendToClient(Object object){
         try {
-            output.writeObject(object);
+           output.writeObject(object);
             System.out.println(object + " - sent");
             output.flush();
         } catch (IOException e) {

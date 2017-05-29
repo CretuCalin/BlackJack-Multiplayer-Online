@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by calin on 21.03.2017.
  */
-public class Card implements Serializable{
+public class Card implements Serializable, Comparable<Card>{
 
     public static final long serialVerionUID = 1L;
 
@@ -66,5 +66,10 @@ public class Card implements Serializable{
     }
 
 
-
+    @Override
+    public int compareTo(Card o) {
+        if (this.value == o.value && this.suit == o.suit)
+            return 1;
+        return 0;
+    }
 }
