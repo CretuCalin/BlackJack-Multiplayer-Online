@@ -19,7 +19,7 @@ public class Table {
         return type;
     }
 
-    private boolean type;
+    private boolean type;  //daca e private sau nu
 
     public String getPassword() {
         return password;

@@ -15,6 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 /**
  * Created by calin on 21.03.2017.
@@ -54,6 +55,18 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
         this.finished = false;
         setUpStreams();
     }
+
+    public PlayerCommunication(User user, int turn, String name) {
+
+        super(name);
+        this.user = user;
+        //this.socket = user.getSocket();
+        //this.server = server;
+        this.turn = turn;
+        this.finished = false;
+       // setUpStreams();
+    }
+
 
     public void setUpStreams(){
         try {
@@ -141,6 +154,17 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
         Table table = new Table(n, name, player, custom, password);
         DatabaseManager.getInstance().addNewTable(table);
         sendToClient(table.getID());
+        System.out.println("Table createad " + table.getName());
+        return table;
+    }
+
+    public Table createTableTest(String name, PlayerCommunication player){
+        int n = new Random().nextInt(100);//Integer.parseInt(read());
+        boolean custom = false;//readBool();
+        String password ="";// read();
+        Table table = new Table(n, name, player, custom, password);
+        DatabaseManager.getInstance().addNewTable(table);
+        //sendToClient(table.getID());
         System.out.println("Table createad " + table.getName());
         return table;
     }

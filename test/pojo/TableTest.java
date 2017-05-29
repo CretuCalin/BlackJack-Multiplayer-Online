@@ -18,52 +18,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class TableTest {
-//    @Test
-//    void addPlayer(Table table) throws IOException {
-//        for (int i = 0; i<new Random().nextInt(10); i++){
-//            PlayerCommunication playerCommunication = new PlayerCommunication(new User(null),null,0,"noname");
-//            table.addPlayer(playerCommunication);
-//        }
-//
-//    }
-//
-//    @Test
-//    void addTable() throws IOException {
-//        PlayerCommunication playerCommunication = new PlayerCommunication(new User(null),new Server(),0,"noname");
-//
-//        for (int i = 0; i<new Random().nextInt(10); i++){
-//            Table table = new Table(new Random().nextInt(6),"test",playerCommunication,false,"");
-//            Table.addTable(table);
-//            addPlayer(table);
-//        }
-//
-//    }
+
     @Test
+    void addTable() {
+        int random = new Random().nextInt(50);
+        PlayerCommunication playerCommunication = new PlayerCommunication(new User(),0,"testName");
+        for (int i=0;i<random;i++){
+            Table table = new Table(new Random().nextInt(100),String.valueOf(new Random().nextInt(100)),playerCommunication,false,null);
+        }
 
-        void define() {
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("t1");
-                Server server = new Server();
-                server.waitForConnections();
-            }
-        });
+    }
 
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    System.out.println("t2");
-                    Socket socket = new Socket("localhost", 9998);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-       t1.start();
-       t2.start();
+    @Test
+    void createPersonalTable() {
+        PlayerCommunication playerCommunication = new PlayerCommunication(new User(),0,"testName");
+        for (int i=0;i< new Random().nextInt(50);i++){
+            playerCommunication.createTableTest(String.valueOf(new Random().nextInt(100)),new PlayerCommunication(new User(),new Random().nextInt(100),String.valueOf(new Random().nextInt(100))));
+        }
     }
 
 }
