@@ -1,5 +1,6 @@
 package sample.Table;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -21,6 +22,7 @@ import sample.ConnectionController;
 import sample.Controller;
 import sample.Table.CardManager;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 //SOMETHING TO COMMIT
@@ -35,7 +37,11 @@ public class PlayScreen {
     Button hitButton;
     Button standButton;
 
+
+    int nowPlayerId ;
+    String nowPlayerUsername;
     private PlayScreen(){
+
         getPreliminaryInfo();
         start();
         play();
@@ -106,22 +112,42 @@ public class PlayScreen {
     }
 
     private void play(){
+
+
         for(int i = 0; i < numberOfPlayers; i++) {
-            int nowPlayerId = ConnectionController.getInstance().getSomeInt();
-            String nowPlayerUsername = ConnectionController.getInstance().getSomeText();
-
-            if (nowPlayerId == myPlayerNumber) {
-                hitButton.setDisable(false);
-                standButton.setDisable(false);
-
-                System.out.println("Sunt aici");
 
 
-                if(standButton.isPressed()) {
-                    hitButton.setDisable(true);
-                    standButton.setDisable(true);
+
+            new SwingWorker<Void,Void>() {
+                @Override
+                protected Void doInBackground() throws Exception {
+                    // asteapta raspuns de la server
+                    nowPlayerId = ConnectionController.getInstance().getSomeInt();
+                    nowPlayerUsername = ConnectionController.getInstance().getSomeText();
+                    return null;
                 }
-            }
+
+                @Override
+                protected void done() {
+                    super.done();
+                    if (nowPlayerId == myPlayerNumber) {
+                        hitButton.setDisable(false);
+                        standButton.setDisable(false);
+
+                        System.out.println("Sunt aici");
+
+
+                        if(standButton.isPressed()) {
+                            hitButton.setDisable(true);
+                            standButton.setDisable(true);
+                        }
+                    }
+
+                    //afiseaza gui
+                }
+            }.execute();
+
+
         }
     }
 
