@@ -18,19 +18,19 @@ public class ConnectionController {
     private static ConnectionController instance;
 
     public static ConnectionController getInstance(){
-        if(instance == null)
+        if(instance == null){
             instance = new ConnectionController();
+        }
         return instance;
     }
 
-    private ConnectionController() {
+    public ConnectionController() {
 
         try {
             socket = new Socket("10.11.48.101", 9998);
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectOutputStream.flush();
             objectInputStream = new ObjectInputStream(socket.getInputStream());
-
         } catch (IOException e) {
             e.printStackTrace();
         }

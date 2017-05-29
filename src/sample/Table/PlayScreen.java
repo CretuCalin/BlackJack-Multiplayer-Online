@@ -18,6 +18,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import pojo.Card;
 import sample.ConnectionController;
 import sample.Controller;
 import sample.Table.CardManager;
@@ -115,16 +116,13 @@ public class PlayScreen {
 
 
         for(int i = 0; i < numberOfPlayers; i++) {
-
-
-
-            new SwingWorker<Void,Void>() {
+            new SwingWorker<Integer,Void>() {
                 @Override
-                protected Void doInBackground() throws Exception {
+                protected Integer doInBackground() throws Exception {
                     // asteapta raspuns de la server
                     nowPlayerId = ConnectionController.getInstance().getSomeInt();
                     nowPlayerUsername = ConnectionController.getInstance().getSomeText();
-                    return null;
+                    return 7;
                 }
 
                 @Override
@@ -140,6 +138,17 @@ public class PlayScreen {
                         if(standButton.isPressed()) {
                             hitButton.setDisable(true);
                             standButton.setDisable(true);
+                        }
+                    }
+                    else {
+                        String message = ConnectionController.getInstance().getSomeText();
+                        while (!message.equals("STAND") || !message.equals("BUST")){
+                            System.out.println(message);
+                            Card card = ConnectionController.getInstance().getSomeCard();
+                            int total = ConnectionController.getInstance().getSomeInt();
+                            System.out.println(card);
+                            System.out.println(total);
+                            message = ConnectionController.getInstance().getSomeText();
                         }
                     }
 

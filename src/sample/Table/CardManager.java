@@ -38,9 +38,13 @@ public class CardManager extends AnchorPane{
         if(!username.equals("Dealer")) {
             id = ConnectionController.getInstance().getSomeInt();
         }
-        addCard(ConnectionController.getInstance().getSomeCard());
+        Card card = ConnectionController.getInstance().getSomeCard();
+        addCard(card);
+        System.out.println(card);
         if(!username.equals("Dealer")) {
-            addCard(ConnectionController.getInstance().getSomeCard());
+            card = ConnectionController.getInstance().getSomeCard();
+            addCard(card);
+            System.out.println(card);
             total = ConnectionController.getInstance().getSomeInt();
         }
 
