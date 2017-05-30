@@ -185,4 +185,12 @@ public class ConnectionController {
     }
 
 
+    public void sendFinishGame() {
+        try{
+            objectOutputStream.writeObject("FINISH GAME");
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 }

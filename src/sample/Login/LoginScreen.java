@@ -240,14 +240,6 @@ public class LoginScreen {
 
     }
 
-    public Label getLinkSignUp() {
-        return linkSignUp;
-    }
-
-    public Label getForgotPassword() {
-        return forgotPassword;
-    }
-
     private boolean loginAllowed(){
         String response = ConnectionController.getInstance().sendLoginData(txtUserName.getText(),pf.getText());
         System.out.println(response);
@@ -257,10 +249,6 @@ public class LoginScreen {
         primaryStage.hide();
         return true;
 
-    }
-
-    public Button getBtnLogin() {
-        return btnLogin;
     }
 
 

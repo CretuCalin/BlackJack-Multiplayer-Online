@@ -138,7 +138,7 @@ public class PlayScreen {
                                 while (created) {
                                 }
                                 //mapa.put(currentPlayer-1, (Card) messageReceived);
-                                opponentsCards.get(currentPlayer - 1).addCard((Card) messageReceived);
+                                //opponentsCards.get(currentPlayer - 1).addCard((Card) messageReceived);
 
 
                             } else if (messageReceived instanceof Integer) {
@@ -148,7 +148,7 @@ public class PlayScreen {
                                     e.printStackTrace();
                                 }
                                 Platform.runLater(() -> {
-                                    opponentsCards.get(currentPlayer - 1).setTotal((int) messageReceived);
+                                    //opponentsCards.get(currentPlayer - 1).setTotal((int) messageReceived);
                                 });
 
                             } else if (messageReceived instanceof String) {
@@ -277,15 +277,15 @@ public class PlayScreen {
 
         int x = 3;
         for(int i = 0; i < numberOfPlayers; i++){
-            CardManager cartiOponent = new CardManager(0,5,0,0);
-            cartiOponent.setPadding(new Insets(5));
-            if(i < 3)
-                tablePane.add(cartiOponent,i,i+1,1,2);
-            else {
-                tablePane.add(cartiOponent, i, x, 1, 2);
-                x--;
-            }
-            opponentsCards.add(cartiOponent);
+           // CardManager cartiOponent = new CardManager(0,5,0,0);
+           // cartiOponent.setPadding(new Insets(5));
+          //  if(i < 3)
+           //     tablePane.add(cartiOponent,i,i+1,1,2);
+          //  else {
+          //      tablePane.add(cartiOponent, i, x, 1, 2);
+          //      x--;
+          //  }
+          //  opponentsCards.add(cartiOponent);
         }
 
         AnchorPane ap = new AnchorPane();
@@ -296,10 +296,10 @@ public class PlayScreen {
 
         ap.getChildren().add(dealerDeck);
 
-        CardManager cartiDealer = new CardManager(0,5,0,0);
+        //CardManager cartiDealer = new CardManager(0,5,0,0);
 
         tablePane.add(ap, 3,0,1,1);
-        tablePane.add(cartiDealer,2,0,1,1);
+        //tablePane.add(cartiDealer,2,0,1,1);
 
         return tablePane;
     }
@@ -334,10 +334,10 @@ public class PlayScreen {
 
         CardManager carti = opponentsCards.get(myPlayerNumber-1);
 
-        HBox.setHgrow(carti, Priority.ALWAYS);
-        carti.setPadding(new Insets(5));
-        carti.setId("myMessagePane");
-        localBoardPane.getChildren().add(carti);
+        //HBox.setHgrow(carti, Priority.ALWAYS);
+        //carti.setPadding(new Insets(5));
+        //carti.setId("myMessagePane");
+        //localBoardPane.getChildren().add(carti);
 
         //BUTTONS
 

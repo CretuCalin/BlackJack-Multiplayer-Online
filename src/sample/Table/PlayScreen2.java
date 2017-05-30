@@ -3,7 +3,7 @@ package sample.Table;
 import javafx.application.Platform;
 import pojo.Card;
 import sample.ConnectionController;
-import sample.Table.CardManager;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,7 +51,7 @@ public class PlayScreen2 {
         String message = ConnectionController.getInstance().getSomeText();
         myPlayerNumber = Character.getNumericValue(message.charAt(message.length() - 1));
         message = ConnectionController.getInstance().getSomeText();
-        numberOfPlayers = Character.getNumericValue(message.charAt(message.length() - 1)) + 1;
+        numberOfPlayers = Character.getNumericValue(message.charAt(message.length() - 1));
 
         System.out.println(myPlayerNumber);
         System.out.println(numberOfPlayers);
@@ -63,12 +63,15 @@ public class PlayScreen2 {
             public void run() {
                 while (true) {
                     Object messageReceived = ConnectionController.getInstance().read();
+                    System.out.println(messageReceived);
                     if (messageReceived instanceof Card) {
                         //while (created) {}
-                        playersCards.get(currentPlayer-1).addCard((Card) messageReceived);
+                        playersCards.get(currentPlayer-1).addCard(((Card) messageReceived).toString());
                     }
                     else if (messageReceived instanceof Integer) {
-                        playersCards.get(currentPlayer-1).setTotal((int) messageReceived);
+                       // playersCards.get(currentPlayer-1).setTotal((int) messageReceived);
+                        System.out.println(messageReceived);
+                        playerUsernames.set(currentPlayer -1, String.valueOf((int) messageReceived));
                     }
                     else if (messageReceived instanceof String) {
                         String message = messageReceived.toString();
@@ -92,6 +95,7 @@ public class PlayScreen2 {
         boolean optionTester = true;
         if(message.equals("Start") && optionTester == true){
 
+
             optionTester = false;
         }
         if((message.contains("Player") || message.equals("Dealer")) && optionTester == true)
@@ -101,11 +105,14 @@ public class PlayScreen2 {
                 currentPlayer = Character.getNumericValue(lastChar);
             }
             else
-                currentPlayer = numberOfPlayers;
+                currentPlayer = numberOfPlayers + 1;
             optionTester=false;
         }
-        if(message.contains("Player turn") && optionTester == true){
-            if(currentPlayer == numberOfPlayers)
+        if(message.contains("Game turn") && optionTester == true){
+            char lastChar = message.charAt(message.length() - 1);
+            currentPlayer = Character.getNumericValue(lastChar);
+            System.out.println( "/" + currentPlayer + "/" + numberOfPlayers + ")");
+            if(myPlayerNumber == currentPlayer)
             {
                 showButtons();
             }
@@ -118,10 +125,14 @@ public class PlayScreen2 {
             //gameFrame.updateInfoLabel(message);
             //gameFrame.hideButtons();
             //this.client.setRunning(false);
+            ConnectionController.getInstance().sendFinishGame();
             optionTester=false;
         }
-        if (message.equals("BUSTED") && optionTester == true)
+        if (message.equals("BUST") && optionTester == true)
         {
+            hitButton.setEnabled(false);
+            standButton.setEnabled(false);
+            //TODO Alerta de BUST
             //sendTotal("BUST");
             /*if(myTurn)
             {
@@ -132,9 +143,10 @@ public class PlayScreen2 {
             }*/
             optionTester=false;
         }
-        if (message.equals("Dealer's turn") && optionTester == true)
+        if (message.equals("dealer's turn") && optionTester == true)
         {
             //sendCurrentPlayer("Dealer");
+
             optionTester=false;
         }
         if(message.contains("Your score is "))
@@ -177,6 +189,7 @@ public class PlayScreen2 {
         }
 
 
+        playersCards.add(dealerCards);
         gbc.gridx = 2;
         gbc.gridy = 0;
         tablePanel.add(dealerCards,gbc);
@@ -200,6 +213,8 @@ public class PlayScreen2 {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Trimit la Server Hit");
+                ConnectionController.getInstance().requestHit();
+
             }
         });
         gbc.gridx = 2;
@@ -212,6 +227,7 @@ public class PlayScreen2 {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Trimit la Server Stand");
+                ConnectionController.getInstance().requestStand();
             }
         });
         gbc.gridx = 3;
@@ -232,6 +248,10 @@ public class PlayScreen2 {
             hitButton.setEnabled(true);
             standButton.setEnabled(true);
         }
+
+    }
+
+    public void setStatus(){
 
     }
 }

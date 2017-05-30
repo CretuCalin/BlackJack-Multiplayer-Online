@@ -6,6 +6,7 @@ import javafx.scene.control.ButtonType;
 import sample.Login.LoginScreen;
 import sample.MenuScreen.LobbyScreen;
 import sample.Table.CardManager;
+import sample.Table.CardManager2;
 import sample.Table.PlayScreen;
 import sample.Table.PlayScreen2;
 
@@ -77,8 +78,8 @@ public class Controller {
         }
     }
 
-    public void standRequest(CardManager cardManager){
+    public void standRequest(CardManager2 cardManager){
         String response = ConnectionController.getInstance().requestStand();
-        cardManager.setResult(response);
+        //PlayScreen2.getInstance().setStatus(cardManager.response);
     }
 }
