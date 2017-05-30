@@ -7,6 +7,7 @@ import sample.Login.LoginScreen;
 import sample.MenuScreen.LobbyScreen;
 import sample.Table.CardManager;
 import sample.Table.PlayScreen;
+import sample.Table.PlayScreen2;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class Controller {
         if (result.get() == ButtonType.OK){
             ConnectionController.getInstance().sendStartGame();
         }
-        PlayScreen.getInstance();
+        PlayScreen2.getInstance();
     }
 
     public void joinTable(String tableName,String password){
@@ -72,7 +73,7 @@ public class Controller {
         String message = (String) ConnectionController.getInstance().getSomeText();
         if(message.equals("GAME STARTED")){
             System.out.println("o sa plece");
-            PlayScreen.getInstance();
+            PlayScreen2.getInstance();
         }
     }
 

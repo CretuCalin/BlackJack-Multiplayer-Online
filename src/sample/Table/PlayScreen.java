@@ -24,28 +24,43 @@ import sample.Controller;
 import sample.Table.CardManager;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 //SOMETHING TO COMMIT
 public class PlayScreen {
 
     private int DIALOG_SIZE = 180;
-    ArrayList<CardManager> opponentsCards;
+    ArrayList<CardManager> opponentsCards = new ArrayList<>();
     private static PlayScreen instance;
     Stage primaryStage;
     int myPlayerNumber = -1;
     int numberOfPlayers = 0;
+    int currentPlayer = 0;
     Button hitButton;
     Button standButton;
+    boolean allInfo = true;
+    boolean created = true;
 
 
     int nowPlayerId ;
     String nowPlayerUsername;
     private PlayScreen(){
-
         getPreliminaryInfo();
-        start();
         play();
+        start();
+    }
+
+    public void getPreliminaryInfo(){
+        String message = ConnectionController.getInstance().getSomeText();
+        myPlayerNumber = Character.getNumericValue(message.charAt(message.length() - 1));
+        message = ConnectionController.getInstance().getSomeText();
+        numberOfPlayers = Character.getNumericValue(message.charAt(message.length() - 1));
+
+        System.out.println(myPlayerNumber);
+        System.out.println(numberOfPlayers);
+
     }
 
     public static PlayScreen getInstance(){
@@ -53,14 +68,6 @@ public class PlayScreen {
             instance = new PlayScreen();
         }
         return instance;
-    }
-
-    private void getPreliminaryInfo(){
-        myPlayerNumber = ConnectionController.getInstance().getSomeInt();
-        numberOfPlayers = ConnectionController.getInstance().getSomeInt();
-
-        System.out.println(myPlayerNumber);
-        System.out.println(numberOfPlayers);
     }
 
     private void start(){
@@ -84,11 +91,15 @@ public class PlayScreen {
 
         bp.add(gridPaneChat,1,0,1,2);
            */
+        System.out.println("aici e");
+
         GridPane tablePane = initializationTable();
         bp.add(tablePane,0,0);
 
         HBox boardPane = initializationBoard();
         bp.add(boardPane, 0, 1);
+
+        created = false;
 
 
         //Add ID's to Nodes
@@ -113,51 +124,124 @@ public class PlayScreen {
     }
 
     private void play(){
+        //Map<Integer, Card> mapa = new Map<Integer, Card>;
+        final Thread thread = new Thread(new Runnable()
+        {
+            @Override
+            public void run() {
+                while (true) {
+                    Object messageReceived = ConnectionController.getInstance().read();
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (messageReceived instanceof Card) {
+                                while (created) {
+                                }
+                                //mapa.put(currentPlayer-1, (Card) messageReceived);
+                                opponentsCards.get(currentPlayer - 1).addCard((Card) messageReceived);
 
 
-        for(int i = 0; i < numberOfPlayers; i++) {
-            new SwingWorker<Integer,Void>() {
-                @Override
-                protected Integer doInBackground() throws Exception {
-                    // asteapta raspuns de la server
-                    nowPlayerId = ConnectionController.getInstance().getSomeInt();
-                    nowPlayerUsername = ConnectionController.getInstance().getSomeText();
-                    return 7;
+                            } else if (messageReceived instanceof Integer) {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                Platform.runLater(() -> {
+                                    opponentsCards.get(currentPlayer - 1).setTotal((int) messageReceived);
+                                });
+
+                            } else if (messageReceived instanceof String) {
+                                String message = messageReceived.toString();
+                                processString(message);
+                            }
+                        }
+                    });
                 }
 
-                @Override
-                protected void done() {
-                    super.done();
-                    if (nowPlayerId == myPlayerNumber) {
-                        hitButton.setDisable(false);
-                        standButton.setDisable(false);
 
-                        System.out.println("Sunt aici");
+            }
+        });
+        thread.start();
 
+    }
 
-                        if(standButton.isPressed()) {
-                            hitButton.setDisable(true);
-                            standButton.setDisable(true);
-                        }
-                    }
-                    else {
-                        String message = ConnectionController.getInstance().getSomeText();
-                        while (!message.equals("STAND") || !message.equals("BUST")){
-                            System.out.println(message);
-                            Card card = ConnectionController.getInstance().getSomeCard();
-                            int total = ConnectionController.getInstance().getSomeInt();
-                            System.out.println(card);
-                            System.out.println(total);
-                            message = ConnectionController.getInstance().getSomeText();
-                        }
-                    }
+    public void showButtons(){
+        hitButton.setDisable(false);
+        standButton.setDisable(false);
+    }
 
-                    //afiseaza gui
-                }
-            }.execute();
+    private void processString(String message)
+    {
+        boolean optionTester = true;
+        /*if(message.contains("Your turn is") && optionTester == true)
+        {
+            char lastChar = message.;
+            int turn = Character.getNumericValue(lastChar);
+            System.out.println(message);
+            System.out.println(turn);
+            myPlayerNumber = turn;
+            optionTester=false;
+        }*/
+        if(message.equals("Start") && optionTester == true){
 
-
+            optionTester = false;
         }
+        if((message.contains("Player") || message.equals("Dealer")) && optionTester == true)
+        {
+            if(message.contains("Player")){
+                char lastChar = message.charAt(message.length() - 1);
+                currentPlayer = Character.getNumericValue(lastChar);
+            }
+            else
+                currentPlayer = 10;
+            optionTester=false;
+        }
+        if(message.contains("Player turn") && optionTester == true){
+            if(currentPlayer == numberOfPlayers)
+            {
+                showButtons();
+            }
+            optionTester = true;
+        }
+
+        if ((message.equals("You Win") || message.equals("You Lost") || message.equals("Draw")
+                || message.equals("Dealer BUSTED! You Win!"))  && optionTester == true)
+        {
+            //gameFrame.updateInfoLabel(message);
+            //gameFrame.hideButtons();
+            //this.client.setRunning(false);
+            optionTester=false;
+        }
+        if (message.equals("BUSTED") && optionTester == true)
+        {
+            //sendTotal("BUST");
+            /*if(myTurn)
+            {
+                gameFrame.updateInfoLabel(message);
+                gameFrame.hideButtons();
+                myTurn = false;
+                this.client.setRunning(false);
+            }*/
+            optionTester=false;
+        }
+        if (message.equals("Dealer's turn") && optionTester == true)
+        {
+            //sendCurrentPlayer("Dealer");
+            optionTester=false;
+        }
+        if(message.contains("Your score is "))
+        {
+            System.out.println(message);
+            //login.dispose();
+            //gameFrame = new GameFrame(currentProcessor);
+            //gameFrame.setVisible(true);
+        }
+        if(optionTester == true && !message.contains("Your score is "))
+        {
+            //client.sendMessage(message);
+        }
+
     }
 
     private GridPane initializationTable(){
@@ -190,8 +274,6 @@ public class PlayScreen {
         ColumnConstraints column6 = new ColumnConstraints();
         column6.setPercentWidth(16.66);
         tablePane.getColumnConstraints().addAll(column1,column2,column3,column4,column5,column6);
-
-        opponentsCards = new ArrayList<>();
 
         int x = 3;
         for(int i = 0; i < numberOfPlayers; i++){
@@ -237,15 +319,15 @@ public class PlayScreen {
         image.setFitWidth(100);
         idInfo.add(image,0,0);
 
-        Label userName = new Label(opponentsCards.get(myPlayerNumber - 1).getUsername());
-        userName.setAlignment(Pos.CENTER);
-        userName.setStyle("-fx-text-fill:  #ffffff;");
-        userName.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
+        //Label userName = new Label(opponentsCards.get(myPlayerNumber - 1).getUsername());
+        //userName.setAlignment(Pos.CENTER);
+        //userName.setStyle("-fx-text-fill:  #ffffff;");
+        //userName.setFont(Font.font("Courier New", FontWeight.BOLD, 14));
 
-        idInfo.add(userName,0,1);
-        idInfo.setAlignment(Pos.CENTER);
+        //idInfo.add(userName,0,1);
+        //idInfo.setAlignment(Pos.CENTER);
 
-        localBoardPane.getChildren().add(idInfo);
+        //localBoardPane.getChildren().add(idInfo);
 
 
         //CARDS
@@ -276,17 +358,18 @@ public class PlayScreen {
         standButton.setId("btnSendMessage");
         standButton.setDisable(true);
 
+
         hitButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 System.out.println("ai dat click pe hit");
-                opponentsCards.get(myPlayerNumber - 1).addCard(ConnectionController.getInstance().requestHit());
-                int total = ConnectionController.getInstance().getSomeInt();
-                System.out.println(total);
-                opponentsCards.get(myPlayerNumber - 1).setTotal(total);
-                if(total >= 21){
-                    standButton.fire();
-                }
+                ConnectionController.getInstance().requestHit();
+                //int total = ConnectionController.getInstance().getSomeInt();
+                //System.out.println(total);
+                //opponentsCards.get(myPlayerNumber - 1).setTotal(total);
+                //if(total >= 21){
+                    //standButton.fire();
+                //}
             }
         });
 
@@ -298,6 +381,7 @@ public class PlayScreen {
                 hitButton.setVisible(false);
             }
         });
+
 
         buttonPane.add(hitButton,0,0);
         buttonPane.add(standButton,0,1);
