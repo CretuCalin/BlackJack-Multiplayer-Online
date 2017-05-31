@@ -27,7 +27,7 @@ public class ConnectionController {
     public ConnectionController() {
 
         try {
-            socket = new Socket("192.168.1.137", 9998);
+            socket = new Socket("10.11.51.101", 9998);
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectOutputStream.flush();
             objectInputStream = new ObjectInputStream(socket.getInputStream());

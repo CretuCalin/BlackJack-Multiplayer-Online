@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.StringJoiner;
 
 /**
  * Created by rares on 29-May-17.
@@ -19,10 +20,13 @@ public class PlayScreen2 {
     private JFrame jframe;
     private ArrayList<CardManager2> playersCards = new ArrayList<CardManager2>();
     private ArrayList<String> playerUsernames = new ArrayList<String>();
+    private ArrayList<JLabel> vectorLabeluri = new ArrayList<>();
+    private JLabel dealerLabel = new JLabel();
 
     int myPlayerNumber = -1;
     int numberOfPlayers = 0;
     int currentPlayer = 0;
+    int scorulMeu = 0;
 
     private CardManager2 dealerCards = new CardManager2();
 
@@ -31,6 +35,7 @@ public class PlayScreen2 {
 
     private JButton hitButton;
     private JButton standButton;
+    private JPanel tablePanel;
 
     private static PlayScreen2 instance ;
 
@@ -48,6 +53,7 @@ public class PlayScreen2 {
     }
 
     public void getPreliminaryInfo(){
+        System.out.println("Vrea sa citeasca");
         String message = ConnectionController.getInstance().getSomeText();
         myPlayerNumber = Character.getNumericValue(message.charAt(message.length() - 1));
         message = ConnectionController.getInstance().getSomeText();
@@ -71,7 +77,8 @@ public class PlayScreen2 {
                     else if (messageReceived instanceof Integer) {
                        // playersCards.get(currentPlayer-1).setTotal((int) messageReceived);
                         System.out.println(messageReceived);
-                        playerUsernames.set(currentPlayer -1, String.valueOf((int) messageReceived));
+                        scorulMeu = (int) messageReceived;
+                        vectorLabeluri.get(currentPlayer - 1).setText(String.valueOf(scorulMeu));
                     }
                     else if (messageReceived instanceof String) {
                         String message = messageReceived.toString();
@@ -119,12 +126,15 @@ public class PlayScreen2 {
             optionTester = true;
         }
 
-        if ((message.equals("You Win") || message.equals("You Lost") || message.equals("Draw")
+        if ((message.equals("WIN") || message.equals("LOST") || message.equals("DRAW")
                 || message.equals("Dealer BUSTED! You Win!"))  && optionTester == true)
         {
             //gameFrame.updateInfoLabel(message);
             //gameFrame.hideButtons();
             //this.client.setRunning(false);
+
+            JOptionPane.showMessageDialog(jframe, message);
+
             ConnectionController.getInstance().sendFinishGame();
             optionTester=false;
         }
@@ -132,6 +142,10 @@ public class PlayScreen2 {
         {
             hitButton.setEnabled(false);
             standButton.setEnabled(false);
+            if(currentPlayer == myPlayerNumber) {
+                JOptionPane.showMessageDialog(jframe, "You got BUSTED! ");
+                jframe.setVisible(false);
+            }
             //TODO Alerta de BUST
             //sendTotal("BUST");
             /*if(myTurn)
@@ -171,7 +185,7 @@ public class PlayScreen2 {
         JPanel borderPane = new JPanel (new BorderLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
-        JPanel tablePanel = new JPanel(new GridBagLayout());
+        tablePanel = new JPanel(new GridBagLayout());
         gbc.insets = new Insets(10,10,10,10);
 
         for(int i = 0; i < numberOfPlayers; i++){
@@ -181,11 +195,11 @@ public class PlayScreen2 {
             tablePanel.add(playerCards,gbc);
             playersCards.add(playerCards);
 
-            String user = "User " + i;
             gbc.gridx = i;
             gbc.gridy = 3;
-            playerUsernames.add(user);
-            tablePanel.add(new JLabel(user),gbc);
+            JLabel labelNou = new JLabel(String.valueOf(i));
+            vectorLabeluri.add(labelNou);
+            tablePanel.add(vectorLabeluri.get(vectorLabeluri.size() - 1),gbc);
         }
 
 
@@ -196,7 +210,7 @@ public class PlayScreen2 {
 
         gbc.gridx = 2;
         gbc.gridy = 1;
-        tablePanel.add(new JLabel("Dealer"),gbc);
+        tablePanel.add(dealerLabel,gbc);
 
         gbc.gridx = 2;
         gbc.gridy = 4;
@@ -214,7 +228,6 @@ public class PlayScreen2 {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Trimit la Server Hit");
                 ConnectionController.getInstance().requestHit();
-
             }
         });
         gbc.gridx = 2;
@@ -228,6 +241,8 @@ public class PlayScreen2 {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Trimit la Server Stand");
                 ConnectionController.getInstance().requestStand();
+                hitButton.setEnabled(false);
+                standButton.setEnabled(false);
             }
         });
         gbc.gridx = 3;
@@ -251,7 +266,5 @@ public class PlayScreen2 {
 
     }
 
-    public void setStatus(){
 
-    }
 }
