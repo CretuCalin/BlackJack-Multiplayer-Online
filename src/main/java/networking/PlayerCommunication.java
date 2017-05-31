@@ -13,33 +13,32 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
-import java.util.Random;
+import java.util.ArrayList;
 
 /**
  * Created by calin on 21.03.2017.
  */
-public class PlayerCommunication extends PlayerBehaviour implements Runnable {
+public class PlayerCommunication extends PlayerBehaviour  {
 
     private ObjectOutputStream output;
     private ObjectInputStream input;
     private Socket socket;
     private Server server;
+    private boolean gameStarted ;
 
     public User getUser() {
         return user;
     }
 
     private User user;
-
-    private GameLogic game;
-    private GameInstance gameInstance;
-
     private String message;
 
     private int turn;
     private volatile boolean finished;
+    public boolean ended;
 
     public void setTurn(int turn) {
         this.turn = turn;
@@ -53,20 +52,10 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
         this.server = server;
         this.turn = turn;
         this.finished = false;
+        this.gameStarted = false;
+        ended = false;
         setUpStreams();
     }
-
-    public PlayerCommunication(User user, int turn, String name) {
-
-        super(name);
-        this.user = user;
-        //this.socket = user.getSocket();
-        //this.server = server;
-        this.turn = turn;
-        this.finished = false;
-       // setUpStreams();
-    }
-
 
     public void setUpStreams(){
         try {
@@ -75,6 +64,7 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
             input = new ObjectInputStream(socket.getInputStream());
             user.setInputStream(input);
             user.setOutputStream(output);
+            System.out.println("Stream seted");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,6 +125,8 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
                 Table tab = Table.existingTable(table);
                 user.setTable(tab);
                 DatabaseManager.getInstance().addToTable(tab, user);
+                tab.addPlayer(this);
+
             }
             else if(MessagesInterpreter.getInstance().wantsToCreateTable(message)) {
                 String table = read();
@@ -142,6 +134,7 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
                 user.setTable(tab);
                 user.setAdmin(true);
                 tab.addPlayer(this);
+                DatabaseManager.getInstance().addToTable(tab, user);
                 Table.addTable(tab);
             }
         }
@@ -158,25 +151,12 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
         return table;
     }
 
-    public Table createTableTest(String name, PlayerCommunication player){
-        int n = new Random().nextInt(100);//Integer.parseInt(read());
-        boolean custom = false;//readBool();
-        String password ="";// read();
-        Table table = new Table(n, name, player, custom, password);
-        DatabaseManager.getInstance().addNewTable(table);
-        //sendToClient(table.getID());
-        System.out.println("Table createad " + table.getName());
-        return table;
-    }
-
     public boolean isOnTable(){
         if(user.getTable() != null){
             return true;
         }
         return false;
     }
-
-    @Override
     public void run() {
 
         while (!isFinished()){
@@ -185,38 +165,53 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
             System.out.println("Login failed");
         }
         try {
-            sendToClient(Manager.getInstance().getTablesManager().printTables());
-            enterATable();
+            //while (true){
+                sendToClient(Manager.getInstance().getTablesManager().printTables());
+                enterATable();
 
-            if(user.isAdmin()) {
-                String message = read();
-                if(message.equals("START GAME")) {
-                    gameInstance = new GameInstance(user.getTable().getPlayers(), user.getTable().getNumberPlayers());
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
+                if(user.isAdmin()) {
+                    String message = read();
+                    if(message.equals("START GAME")) {
+                        user.getTable().setGameInstance(new GameInstance(user.getTable().getPlayers(), user.getTable().getNumberPlayers()));
+                        user.getTable().setGame(new GameLogic(user.getTable().getGameInstance()));
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
 
-                            game = new GameLogic(gameInstance);
-                            game.startGame();
-                            user.setTable(null);
-                        }
-                    }).start();
-                }
-            }
-            System.out.println(gameInstance.isGameStarted());
+                                for(int i = 0; i<user.getTable().getNumberPlayers(); i++){
+                                    System.out.println("Am trimis la " + i);
+                                    user.getTable().getPlayers().get(i).gameStarted = true;
+                                    if(user.getTable().getPlayers().get(i).getUser() != user){
+                                        user.getTable().getPlayers().get(i).sendToClient("GAME STARTED");
+                                    }
 
-            while (isOnTable() && !isFinished()) {
-                //System.out.println("Asteeeept");
-                if ((gameInstance.getTurn()+1) == this.turn && gameInstance.isGameStarted()  && !finished) {
-                    System.out.println("Am asteeeeptat");
-                    message = (String) input.readObject();
-                    System.out.println(message);
-                    game.interpretMessage(this, message);
+                                }
+                                user.getTable().getGame().startGame();
+                                ArrayList<PlayerCommunication> players = user.getTable().getPlayers();
+                                int ID = user.getTable().getID();
+                                for (int i = 0; i < players.size() ; i++){
+                                    players.get(i).getUser().setTable(null);
+                                }
+                                DatabaseManager.getInstance().deleteUsers(players);
+                                DatabaseManager.getInstance().deleteTable(ID);
+                            }
+                        }).start();
+                        while(!user.getTable().getGameInstance().isGameStarted()){}
+                    }
+                }else{
+                    while(user.getTable().getGameInstance() == null){}
+                    while(!user.getTable().getGameInstance().isGameStarted()){}
+                    System.out.println("Clientul a trecut mai departe " + user.getTable().getGameInstance().isGameStarted());
                 }
-                if (!isOnTable()) {
-                    break;
+
+                while (isOnTable() && user.getTable().getGameInstance().isGameStarted()) {
+                    if ((user.getTable().getGameInstance().getTurn()+1) == this.turn && user.getTable().getGameInstance().isGameStarted()  && !finished) {
+                        System.out.println("Am asteeeeptat");
+                        message = (String) input.readObject();
+                        user.getTable().getGame().interpretMessage(this, message);
+                    }
                 }
-            }
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
@@ -229,7 +224,7 @@ public class PlayerCommunication extends PlayerBehaviour implements Runnable {
 
     public void sendToClient(Object object){
         try {
-           output.writeObject(object);
+            output.writeObject(object);
             System.out.println(object + " - sent");
             output.flush();
         } catch (IOException e) {

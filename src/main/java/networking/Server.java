@@ -7,10 +7,7 @@ import org.omg.CORBA.IRObjectOperations;
 import pojo.Table;
 import pojo.User;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
@@ -40,6 +37,7 @@ public class Server {
     private GameLogic game;
 
     private final int numberOfPlayersPerGame = 4;
+    private Server server;
 
 
     public Server(){
@@ -50,6 +48,7 @@ public class Server {
         numberOfPlayersOfThisGame = 0;
         totalNumberOfPlayers = 0;
         running = true;
+        server = this;
 
         try {
             serverSocket = new ServerSocket(portNumber);
@@ -69,9 +68,18 @@ public class Server {
             try {
                 clientSocket = serverSocket.accept();
                 System.out.println("new client");
-                User user = new User(clientSocket);
-                PlayerCommunication player = new PlayerCommunication(user,this,numberOfPlayersOfThisGame,"Player " + (numberOfPlayersOfThisGame + 1));
-                threadPool.execute(player);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            User user = new User(clientSocket);
+                            PlayerCommunication player = new PlayerCommunication(user, server, numberOfPlayersOfThisGame, "Player " + (numberOfPlayersOfThisGame + 1));
+                            player.run();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
             } catch (IOException e) {
                 e.printStackTrace();
             }

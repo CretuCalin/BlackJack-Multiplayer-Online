@@ -1,12 +1,12 @@
 package managers;
 
 import login.Database;
+import networking.PlayerCommunication;
 import pojo.Table;
 import pojo.TablesForClient;
 import pojo.User;
 
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 
@@ -26,7 +26,7 @@ public class DatabaseManager {
 
     private static DatabaseManager instance;
 
-    public  synchronized static DatabaseManager getInstance(){
+    public static DatabaseManager getInstance(){
         if(instance == null)
             instance = new DatabaseManager();
         return instance;
@@ -36,19 +36,25 @@ public class DatabaseManager {
         return database.userExits(username,password);
     }
 
-    /*public boolean usernameExits(String username){
-        return database.usernameExits(username);
-    }*/
+    public void deleteUsers(ArrayList<PlayerCommunication> players){
+        for (int i = 0; i < players.size(); i++){
+            database.deleteUser(players.get(i).getUser().getUsername());
+        }
+    }
 
-    public synchronized boolean  createNewUser(String username, String password){
+    public void deleteTable(int ID){
+        database.deleteTable(ID);
+        getTables();
+    }
+
+
+    public boolean createNewUser(String username, String password){
         return database.createNewUser(username,password);
     }
 
     public boolean addNewTable(Table table){
         return database.createNewTable(table);
     }
-
-    public boolean deletePlayersTest(int number) throws SQLException {return database.deletePlayersTest(number);}
 
     public void addToTable(Table table, User user){
         database.addToTable(table, user);

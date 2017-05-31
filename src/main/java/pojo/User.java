@@ -72,10 +72,6 @@ public class User {
         this.socket = socket;
     }
 
-    public User(){
-
-    }
-
     public void setAdmin(boolean admin){
         this.admin = admin;
     }

@@ -1,6 +1,8 @@
 package pojo;
 
+import gamelogic.GameLogic;
 import javafx.print.PageLayout;
+import networking.GameInstance;
 import networking.PlayerCommunication;
 
 import java.lang.reflect.Array;
@@ -15,11 +17,31 @@ public class Table {
     private int numberPlayers;
     private PlayerCommunication admin;
 
+    public GameInstance getGameInstance() {
+        return gameInstance;
+    }
+
+    public void setGameInstance(GameInstance gameInstance) {
+        this.gameInstance = gameInstance;
+    }
+
+    private GameInstance gameInstance;
+
+    public GameLogic getGame() {
+        return game;
+    }
+
+    public void setGame(GameLogic game) {
+        this.game = game;
+    }
+
+    private GameLogic game;
+
     public boolean isPrivate() {
         return type;
     }
 
-    private boolean type;  //daca e private sau nu
+    private boolean type;
 
     public String getPassword() {
         return password;
@@ -66,9 +88,11 @@ public class Table {
     }
 
     public static Table existingTable(String table){
-        for (int i = 0; i < tables.size(); i++)
+        for (int i = 0; i < tables.size(); i++) {
+            System.out.println("Tabela " + tables.get(i).getName() );
             if (tables.get(i).getName().equals(table))
                 return tables.get(i);
+        }
         return null;
     }
 
