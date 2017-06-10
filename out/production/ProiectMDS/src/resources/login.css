@@ -1,0 +1,47 @@
+#root {
+
+ -fx-background-image: url("/resources/background_login_small.jpg");
+-fx-border-color: #663F15;
+ -fx-border-radius: 0;
+-fx-padding: 10 10 10 10;
+-fx-background-radius: 20;
+}
+
+ 
+
+#bp {
+-fx-background-image: url("/resources/background_login_big.jpg");
+
+
+}
+
+ 
+
+#btnLogin {
+
+    -fx-background-radius: 10, 10, 9, 8;
+    -fx-padding: 10px 120px 10px 120px;
+    -fx-background-color: linear-gradient(orange, orangered );
+
+}
+
+
+
+#text {
+
+ -fx-fill:  linear-gradient(orange , orangered);
+
+}
+
+#textField {
+    -fx-text-box-border: transparent;
+    -fx-background-color: #FDF2DE;
+    -fx-text-fill:  #663F15;
+    -fx-border-radius: 0;
+    -fx-padding: 5 5 5 5;
+    -fx-background-radius: 5;
+    -fx-max-width: 290;
+
+
+}
+
